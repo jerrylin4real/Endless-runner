@@ -126,7 +126,7 @@ class Play extends Phaser.Scene {
             fixedWidth: 150
         }
         this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: F <- ->', redConfig);
-        this.quitText = this.add.text(245, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
+        this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // GAME OVER flag
         this.gameOver = false;
