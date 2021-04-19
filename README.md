@@ -16,10 +16,10 @@ https://leland-jin.github.io/Rocket_Patrol_Mod/
 You can use Python as a web server to host the game locally:
 `python3 -m http.server`
 
-Hours taken:
+Hours taken: 12+
 
 Features implemented:
-`Total score earned: 100`
+`Total score earned: 120`
 
  - Track a high score that persists across scenes and display it in the UI (5)
  - Allow the player to control the Rocket after it's fired (5)
@@ -31,6 +31,8 @@ Features implemented:
  - Display the time remaining (in minute:seconds) on the screen (10)
  - Implement a new timing/scoring mechanism that adds time to the clock for successful hits (20)
  - Create a new spaceship type (w/ new artwork) that's smaller, moves faster, and is worth more points (20)
+ - Create and implement a new weapon (w/ new behavior and graphics) (20)
+
 
 
 
@@ -42,6 +44,7 @@ Features implemented:
  - https://phaser.discourse.group/t/countdown-timer/2471/4
  - http://millionthvector.blogspot.com/p/free-sprites.html
  - https://stackoverflow.com/questions/56220214/how-to-correctly-resize-images-to-retain-quality-in-phaser-3
+ - https://www.pikpng.com/downpngs/hRJooow_turbulence-explosion-sprite-sheet-png-clipart/
 
 ### Credit
   - Works by MillionthVector:

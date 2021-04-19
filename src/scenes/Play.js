@@ -28,6 +28,7 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
+        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12});
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
     }
     // Note: The keyword 'this' refers to the class 'Play'
@@ -37,16 +38,19 @@ class Play extends Phaser.Scene {
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
+        this.superWeaponRewarded = false;
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
+        this.superWeaponCount = 0;
 
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
         // Azure/0x3e5861 UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00BBFF).setOrigin(0, 0);
+
         // Grey/0x00BBFF borders 
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0x3e5861).setOrigin(0, 0);
@@ -84,6 +88,12 @@ class Play extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
             frameRate: 30
         });
+        this.anims.create({
+            key: 'explode2',
+            frames: this.anims.generateFrameNumbers('explosion2', { start: 0, end: 12, first: 0 }),
+            frameRate: 10
+        });
+
 
         // initialize score
         this.p1Score = 0;
@@ -103,21 +113,30 @@ class Play extends Phaser.Scene {
         }
 
 
+        // display Left and middle UI
+        this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 5, 'Score:', textConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding + 5, this.p1Score, textConfig);
 
-        this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding, 'Score:', textConfig);
-        this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding * 2 - 10, this.p1Score, textConfig);
-
-        this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 30, 'Top Score:', textConfig);
-        this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 30,
+        this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 35, 'Top Score:', textConfig);
+        this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 35,
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
+
+        let redConfig = {
+            color: 'red', // color hex code: black
+            fixedWidth: 150
+        }
+        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: F <- ->', redConfig);
+        this.quitText = this.add.text(245, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // GAME OVER flag
         this.gameOver = false;
 
         // play clock
         this.scoreConfig.fixedWidth = 0;
+        this.countdownText = this.add.text(440, borderUISize + borderPadding + 10, 'Countdown: ' + this.formatTime(this.initialTime));
 
-        this.countdownText = this.add.text(450, borderUISize + borderPadding, 'Countdown: ' + this.formatTime(this.initialTime));
+        // super weapon indicator
+        this.superWeaponText = this.add.text(440, borderUISize + borderPadding + 40, 'Superweapon(V): ' + this.superWeaponCount);
 
         // For each 1000 ms or 1 second, call onEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
@@ -177,6 +196,7 @@ class Play extends Phaser.Scene {
         }
         */
 
+
         if (this.hasteCounter > 30 && this.hasted == false) {
             this.ship01.moveSpeed += 2;
             this.ship02.moveSpeed += 2;
@@ -204,13 +224,28 @@ class Play extends Phaser.Scene {
         if (!this.gameOver) {
 
             this.p1Rocket.update();             // update p1
-            this.ship01.update();               // update spaceship (x3)
+            this.ship01.update();               // update spaceship (x4)
             this.ship02.update();
             this.ship03.update();
             this.ship04.update();
 
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
+        }
+
+        // new weapon
+        if (this.superWeaponCount > 0 && Phaser.Input.Keyboard.JustDown(keyV)) { // if pressed v for superweapon
+            let ships = [
+                this.ship01,
+                this.ship02,
+                this.ship03,
+                this.ship04
+            ];
+
+            let randomShip = ships[Math.floor(Math.random() * ships.length)];
+            this.p1Rocket.reset();
+            this.shipExplode2(randomShip);
+            this.superWeaponCount -= 1;
         }
 
         // check collisions
@@ -230,9 +265,6 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
-        }
-        if (this.hasted == false) {
-            this.hasteCounter += 1;
         }
 
     }
@@ -256,51 +288,90 @@ class Play extends Phaser.Scene {
         if (!this.gameOver) {
             this.initialTime -= 1; // countdown 1 for one second
             this.countdownText.setText('Countdown: ' + this.formatTime(this.initialTime));
+            if (this.hasted == false) {
+                this.hasteCounter += 1;
+            }
+            if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
+                this.superWeaponRewarded = true;
+                this.superWeaponCount += 1;
+            }
+            this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
         }
     }
 
-checkCollision(rocket, ship) {
-    // simple AABB checking
-    if (rocket.x < ship.x + ship.width &&
-        rocket.x + rocket.width > ship.x &&
-        rocket.y < ship.y + ship.height &&
-        rocket.height + rocket.y > ship.y) {
-        return true;
-    } else {
-        return false;
+    checkCollision(rocket, ship) {
+        // simple AABB checking
+        if (rocket.x < ship.x + ship.width &&
+            rocket.x + rocket.width > ship.x &&
+            rocket.y < ship.y + ship.height &&
+            rocket.height + rocket.y > ship.y) {
+            return true;
+        } else {
+            return false;
+        }
     }
-}
 
-shipExplode(ship) {
-    // temporarily hide ship
-    ship.alpha = 0;
-    // create explosion sprite at ship's position
-    let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-    boom.anims.play('explode');             // play explode animation
-    boom.on('animationcomplete', () => {    // callback after anim completes
-        ship.reset();                         // reset ship position
-        ship.alpha = 1;                       // make ship visible again
-        boom.destroy();                       // remove explosion sprite
-    });
+    shipExplode(ship) {
+        // temporarily hide ship
+        ship.alpha = 0;
+        // create explosion sprite at ship's position
+        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        boom.anims.play('explode');             // play explode animation
+        boom.on('animationcomplete', () => {    // callback after anim completes
+            ship.reset();                         // reset ship position
+            ship.alpha = 1;                       // make ship visible again
+            boom.destroy();                       // remove explosion sprite
+        });
 
-    // score add and repaint
-    this.p1Score += ship.points;
-    if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
-        localStorage.setItem("RocketPatrolTopScore", this.p1Score);
-        this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        // score add and repaint
+        this.p1Score += ship.points;
+        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        }
+        this.scoreLeft.text = this.p1Score;
+
+        let soundFXLib = [
+            'sfx_explosion_spell',
+            'sfx_explosion_sea-mine',
+            'sfx_explosion_shot-light',
+            'sfx_explosion_crash'
+        ];
+        let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
+        this.sound.play(soundFXLib[random4SoundFX]);
+        // add time bonus
+        this.initialTime += ship.timeBonus;
     }
-    this.scoreLeft.text = this.p1Score;
 
-    let soundFXLib = [
-        'sfx_explosion_spell',
-        'sfx_explosion_sea-mine',
-        'sfx_explosion_shot-light',
-        'sfx_explosion_crash'
-    ];
-    let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
-    this.sound.play(soundFXLib[random4SoundFX]);
-    this.initialTime += ship.timeBonus;
-    // add time bonus
+    shipExplode2(ship) {
+        // temporarily hide ship
+        ship.alpha = 0;
+        // create explosion sprite at ship's position
+        let boom2 = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+        boom2.anims.play('explode2');             // play explode animation
+        boom2.on('animationcomplete', () => {    // callback after anim completes
+            ship.reset();                         // reset ship position
+            ship.alpha = 1;                       // make ship visible again
+            boom2.destroy();                       // remove explosion sprite
+        });
 
-}
+        // score add and repaint
+        this.p1Score += ship.points;
+        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+        }
+        this.scoreLeft.text = this.p1Score;
+
+        let soundFXLib = [
+            'sfx_explosion_spell',
+            'sfx_explosion_sea-mine',
+            'sfx_explosion_shot-light',
+            'sfx_explosion_crash'
+        ];
+        let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
+        this.sound.play(soundFXLib[random4SoundFX]);
+        // add time bonus
+        this.initialTime += ship.timeBonus;
+    }
 }
