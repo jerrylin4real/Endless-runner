@@ -1,7 +1,6 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
-        this.topScore = 0;
     }
     // Note: The keyword 'this' refers to the class 'Play'
     preload() {
@@ -11,6 +10,7 @@ class Play extends Phaser.Scene {
         this.load.image('starfield', './assets/starfield.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
+
     }
 
     create() {
@@ -156,11 +156,17 @@ class Play extends Phaser.Scene {
             boom.destroy();                       // remove explosion sprite
         });
         // score add and repaint
+
         this.p1Score += ship.points;
         if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
             localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+            this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
+            ;
         }
         this.scoreLeft.text = this.p1Score;
+        /*
+       
+        */
         this.sound.play('sfx_explosion');
     }
 }
