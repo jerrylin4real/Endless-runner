@@ -49,7 +49,7 @@ class Menu extends Phaser.Scene {
       // Novice mode
       game.settings = {
         spaceshipSpeed: 3,
-        gameTimer: 60000 // 60 second
+        gameTimer: 60 // 60 second
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");
@@ -58,7 +58,7 @@ class Menu extends Phaser.Scene {
       // Expert mode
       game.settings = {
         spaceshipSpeed: 4,
-        gameTimer: 45000
+        gameTimer: 45
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");
@@ -66,9 +66,9 @@ class Menu extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(keyUP)) {
       // Quick Test mode
-      game.settings = {
-        spaceshipSpeed: 10,
-        gameTimer: 2500
+      game.settings = { // a list of settings
+        spaceshipSpeed: 5,
+        gameTimer: 3
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");
@@ -77,8 +77,8 @@ class Menu extends Phaser.Scene {
     if (Phaser.Input.Keyboard.JustDown(keyM)) {
       // Simultaneous two-player mode
       game.settings = {
-        spaceshipSpeed: 10,
-        gameTimer: 2500
+        spaceshipSpeed: 5,
+        gameTimer: 120
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");

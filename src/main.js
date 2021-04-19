@@ -5,7 +5,7 @@ let config = {
   scene: [Menu, Play]
 }
 
-let game = new Phaser.Game(config);
+var game = new Phaser.Game(config);
 
 // set UI sizes
 let borderUISize = game.config.height / 15;
@@ -16,4 +16,5 @@ let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ,
 
 // global variables/storages
 localStorage.setItem("RocketPatrolTopScore", 0);
+localStorage.setItem("RocketPatrolSettings", {});
 

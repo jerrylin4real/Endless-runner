@@ -4,6 +4,19 @@ class Play extends Phaser.Scene {
         this.bgmPlayed = false;
         this.bgmCreated = false;
         
+        // display score
+        this.scoreConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {  // set the size of the display box
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
     }
 
     preload() {
@@ -17,7 +30,9 @@ class Play extends Phaser.Scene {
     }
     // Note: The keyword 'this' refers to the class 'Play'
 
+
     create() {
+        this.initialTime = game.settings.gameTimer;
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
@@ -76,19 +91,7 @@ class Play extends Phaser.Scene {
             fixedWidth: 100
         }
 
-        // display score
-        let scoreConfig = {
-            fontFamily: 'Courier',
-            fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
-            align: 'right',
-            padding: {  // set the size of the display box
-                top: 5,
-                bottom: 5,
-            },
-            fixedWidth: 100
-        }
+
 
         this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding, 'Score:', textConfig);
         this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding * 2 - 10, this.p1Score, textConfig);
@@ -100,14 +103,21 @@ class Play extends Phaser.Scene {
         // GAME OVER flag
         this.gameOver = false;
 
-        // 60-second play clock
-        scoreConfig.fixedWidth = 0;
+        // play clock
+        this.scoreConfig.fixedWidth = 0;
+
+        this.countdownText = this.add.text(450, borderUISize + borderPadding, 'Countdown: ' + this.formatTime(this.initialTime));
+
+        // For each 1000 ms or 1 second, call onEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+
+        /*
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
-
+        */
         // play background music 
         if (this.bgmPlayed == false) {
             if (this.bgmCreated) {
@@ -129,12 +139,14 @@ class Play extends Phaser.Scene {
         }
     }
 
+
+
     update() {
         // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
-            //this.gameOver = true;
-            //this.scene.start("menuScene") // Press q to end the game
+            this.gameOver = true;
+            this.initialTime = 0;
         }
         // Pause feature
         /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
@@ -167,7 +179,6 @@ class Play extends Phaser.Scene {
             this.ship01.update();               // update spaceship (x3)
             this.ship02.update();
             this.ship03.update();
-
             // Debugging Only
             // console.log('gametime: ' + this.game.getTimer());
         }
@@ -185,6 +196,31 @@ class Play extends Phaser.Scene {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
         }
+    }
+
+
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+
+    onEvent() {
+        if (this.initialTime <= 0) {
+            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
+            return;
+        }
+        console.log("initialTime: " + this.initialTime);
+        this.update();
+        this.initialTime -= 1; // countdown 1 for one second
+        this.countdownText.setText('Countdown: ' + this.formatTime(this.initialTime));
     }
 
     checkCollision(rocket, ship) {
