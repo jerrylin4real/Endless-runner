@@ -19,11 +19,13 @@ You can use Python as a web server to host the game locally:
 Hours taken:
 
 Features implemented:
-`Total score earned: 85`
+`Total score earned: 100`
 
  - Track a high score that persists across scenes and display it in the UI (5)
  - Allow the player to control the Rocket after it's fired (5)
  - Add your own (copyright-free) background music to the Play scene (5)
+ - Implement the speed increase that happens after 30 seconds in the original game (5)
+ - Create a new animated sprite for the Spaceship enemies (10)
  - Create 4 new explosion SFX and randomize which one plays on impact (10)
  - Replace the UI borders with new artwork (10)
  - Display the time remaining (in minute:seconds) on the screen (10)
@@ -42,7 +44,10 @@ Features implemented:
  - https://stackoverflow.com/questions/56220214/how-to-correctly-resize-images-to-retain-quality-in-phaser-3
 
 ### Credit
-  - The sprite 'smallfreighterspr.png' is a work by MillionthVector.
+  - Works by MillionthVector:
+    - rocket2.png
+    - speedship.png
+    - smallfreighterspr.png
 
 
 ### Copyright-Free SoundFX:
