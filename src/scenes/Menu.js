@@ -5,13 +5,13 @@ class Menu extends Phaser.Scene {
 
   preload() {
     // load audio
+
     this.load.audio('sfx_select', './assets/blip_select12.wav');
     this.load.audio('sfx_explosion0', './assets/explosion38.wav');
     this.load.audio('sfx_explosion_spell', './assets/mixkit-explosion-spell-1685.wav');
     this.load.audio('sfx_explosion_sea-mine', './assets/mixkit-sea-mine-explosion-1184.wav');
     this.load.audio('sfx_explosion_shot-light', './assets/mixkit-shot-light-explosion-1682.wav');
     this.load.audio('sfx_explosion_crash', './assets/mixkit-truck-crash-with-explosion-1616.wav');
-
     this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
   }
 
@@ -68,11 +68,11 @@ class Menu extends Phaser.Scene {
       // Quick Test mode
       game.settings = {
         spaceshipSpeed: 10,
-        gameTimer: 25000
+        gameTimer: 2500
       }
       this.sound.play('sfx_select');
       this.scene.start("playScene");
     }
-    
+
   }
 }

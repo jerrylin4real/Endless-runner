@@ -1,8 +1,10 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+        this.bgmPlayed = false;
+        this.bgmCreated = false;
     }
-    // Note: The keyword 'this' refers to the class 'Play'
+
     preload() {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
@@ -10,8 +12,9 @@ class Play extends Phaser.Scene {
         this.load.image('starfield', './assets/starfield.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
-
+        this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
     }
+    // Note: The keyword 'this' refers to the class 'Play'
 
     create() {
         // place tile sprite
@@ -102,17 +105,37 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
-
         }, null, this);
+
+        // play background music 
+        if (this.bgmPlayed == false) {
+            if (this.bgmCreated){
+                this.bgm.resume();
+                return;
+            }
+            this.bgm = this.sound.add('bgm', {
+                mute: false,
+                volume: 0.7,
+                rate: 1,
+                loop: true,
+                delay: 0
+            });
+            this.bgmCreated = true;
+            this.bgm.play();
+        } else {
+            // Resume bgm if bgm exists
+            this.bgm.resume(); 
+        }
     }
 
     update() {
-        let paused = false;
+        // let paused = false;
         // check key input for restart / menu
         if (Phaser.Input.Keyboard.JustDown(keyQ)) {
             //this.gameOver = true;
             //this.scene.start("menuScene") // Press q to end the game
         }
+        // Pause feature
         /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
             this.scene.pause();
             paused = true;
@@ -123,6 +146,11 @@ class Play extends Phaser.Scene {
             }
         }
         */
+        if (this.gameOver && this.bgmCreated) {
+            this.bgm.pause()
+            this.bgmPlayed = false;
+        }
+
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
@@ -178,24 +206,22 @@ class Play extends Phaser.Scene {
             ship.alpha = 1;                       // make ship visible again
             boom.destroy();                       // remove explosion sprite
         });
-        // score add and repaint
 
+        // score add and repaint
         this.p1Score += ship.points;
         if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
             localStorage.setItem("RocketPatrolTopScore", this.p1Score);
             this.topScoreLeft.text = localStorage.getItem("RocketPatrolTopScore");
-            ;
         }
         this.scoreLeft.text = this.p1Score;
 
-        var soundFXLib = [
-            'sfx_explosion_spell', 
+        let soundFXLib = [
+            'sfx_explosion_spell',
             'sfx_explosion_sea-mine',
             'sfx_explosion_shot-light',
             'sfx_explosion_crash'
         ];
-
-        var random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
+        let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
         this.sound.play(soundFXLib[random4SoundFX]);
     }
 }

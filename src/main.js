@@ -16,3 +16,4 @@ let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN, keyW, keyS, keyA, keyD, keyQ,
 
 // global variables/storages
 localStorage.setItem("RocketPatrolTopScore", 0);
+

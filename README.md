@@ -9,7 +9,7 @@ Spring 2021
 Public GitHub repository:
 https://github.com/leland-jin/Rocket_Patrol_Mod
 
-GitHub pages:
+GitHub page:
 
 https://leland-jin.github.io/Rocket_Patrol_Mod/
 
@@ -32,5 +32,6 @@ Features implemented:
 
 ### Copyright Free SoundFX:
  - https://mixkit.co/free-sound-effects/explosion/
+ - https://mixkit.co/free-stock-music/tag/space/
 
 
