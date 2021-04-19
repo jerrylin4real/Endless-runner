@@ -19,11 +19,15 @@ You can use Python as a web server to host the game locally:
 Hours taken:
 
 Features implemented:
-`Total score earned: 20`
+`Total score earned: 35`
 
  - Track a high score that persists across scenes and display it in the UI (5)
  - Allow the player to control the Rocket after it's fired (5)
+ - Add your own (copyright-free) background music to the Play scene (5)
  - Create 4 new explosion SFX and randomize which one plays on impact (10)
+ - Replace the UI borders with new artwork (10)
+
+
 
 ---
 ### Reference:
