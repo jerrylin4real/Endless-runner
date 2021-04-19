@@ -12,4 +12,7 @@ let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;
 
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT;
+let keyF, keyR, keyLEFT, keyRIGHT, keyUP, KeyDOWN;
+
+// global variables/storages
+localStorage.setItem("RocketPatrolTopScore", 0);

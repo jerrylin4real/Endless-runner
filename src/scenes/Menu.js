@@ -35,6 +35,8 @@ class Menu extends Phaser.Scene {
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+    keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+
   }
 
   update() {
@@ -56,5 +58,16 @@ class Menu extends Phaser.Scene {
       this.sound.play('sfx_select');
       this.scene.start("playScene");
     }
+
+    if (Phaser.Input.Keyboard.JustDown(keyUP)) {
+      // Quick Test mode
+      game.settings = {
+        spaceshipSpeed: 10,
+        gameTimer: 25000
+      }
+      this.sound.play('sfx_select');
+      this.scene.start("playScene");
+    }
+    
   }
 }

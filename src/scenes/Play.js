@@ -1,8 +1,9 @@
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
+        this.topScore = 0;
     }
-
+    // Note: The keyword 'this' refers to the class 'Play'
     preload() {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
@@ -47,6 +48,21 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
+        this.topScore = 0;
+
+        // display text
+        let textConfig = {
+            fontFamily: 'Courier',
+            fontSize: '15px',
+            //backgroundColor: '#000000',
+            color: '#843605', // color hex code: black
+            align: 'left',
+            padding: {  // set the size of the display box
+                top: 5,
+                bottom: 5,
+            },
+            fixedWidth: 100
+        }
 
         // display score
         let scoreConfig = {
@@ -55,13 +71,19 @@ class Play extends Phaser.Scene {
             backgroundColor: '#F3B141',
             color: '#843605',
             align: 'right',
-            padding: {
+            padding: {  // set the size of the display box
                 top: 5,
                 bottom: 5,
             },
             fixedWidth: 100
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+
+        this.currentScoreText = this.add.text(borderUISize, borderUISize + borderPadding, 'Score:', textConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding * 2 - 10, this.p1Score, textConfig);
+
+        this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 30, 'Top Score:', textConfig);
+        this.topScoreLeft = thfffis.add.text(borderUISize + 100, borderUISize + borderPadding + 30,
+            localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         // GAME OVER flag
         this.gameOver = false;
@@ -72,6 +94,7 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', scoreConfig).setOrigin(0.5);
             this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
+
         }, null, this);
     }
 
@@ -134,8 +157,10 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
+        if (this.p1Score > localStorage.getItem("RocketPatrolTopScore")) {
+            localStorage.setItem("RocketPatrolTopScore", this.p1Score);
+        }
         this.scoreLeft.text = this.p1Score;
-
         this.sound.play('sfx_explosion');
     }
 }
