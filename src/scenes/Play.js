@@ -3,6 +3,7 @@ class Play extends Phaser.Scene {
         super("playScene");
         this.bgmPlayed = false;
         this.bgmCreated = false;
+        
     }
 
     preload() {
@@ -166,6 +167,9 @@ class Play extends Phaser.Scene {
             this.ship01.update();               // update spaceship (x3)
             this.ship02.update();
             this.ship03.update();
+
+            // Debugging Only
+            // console.log('gametime: ' + this.game.getTimer());
         }
 
         // check collisions
