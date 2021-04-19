@@ -82,7 +82,7 @@ class Play extends Phaser.Scene {
         this.scoreLeft = this.add.text(borderUISize + borderPadding + 50, borderUISize + borderPadding * 2 - 10, this.p1Score, textConfig);
 
         this.topScoreText = this.add.text(borderUISize, borderUISize + borderPadding + 30, 'Top Score:', textConfig);
-        this.topScoreLeft = thfffis.add.text(borderUISize + 100, borderUISize + borderPadding + 30,
+        this.topScoreLeft = this.add.text(borderUISize + 100, borderUISize + borderPadding + 30,
             localStorage.getItem("RocketPatrolTopScore"), textConfig);
 
         // GAME OVER flag
