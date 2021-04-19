@@ -25,8 +25,10 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
-        // add Rocket (p1)
+        // add Rockets for player(s) 
         this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
+
+        this.p2Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(490, 0);
 
         // add Spaceships (x3)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 4, 'spaceship', 0, 30).setOrigin(0, 0);
@@ -38,6 +40,13 @@ class Play extends Phaser.Scene {
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+        keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+
 
         // animation config
         this.anims.create({
@@ -48,7 +57,6 @@ class Play extends Phaser.Scene {
 
         // initialize score
         this.p1Score = 0;
-        this.topScore = 0;
 
         // display text
         let textConfig = {
@@ -99,7 +107,22 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+        let paused = false;
         // check key input for restart / menu
+        if (Phaser.Input.Keyboard.JustDown(keyQ)) {
+            //this.gameOver = true;
+            //this.scene.start("menuScene") // Press q to end the game
+        }
+        /* if (Phaser.Input.Keyboard.JustDown(keyP)) {
+            this.scene.pause();
+            paused = true;
+            this.add.text(game.config.width / 2, game.config.height / 2, 'GAME PAUSED').setOrigin(0.5);
+            if (paused == true) {
+                this.scene.resume();
+                paused = false;
+            }
+        }
+        */
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
@@ -164,9 +187,15 @@ class Play extends Phaser.Scene {
             ;
         }
         this.scoreLeft.text = this.p1Score;
-        /*
-       
-        */
-        this.sound.play('sfx_explosion');
+
+        var soundFXLib = [
+            'sfx_explosion_spell', 
+            'sfx_explosion_sea-mine',
+            'sfx_explosion_shot-light',
+            'sfx_explosion_crash'
+        ];
+
+        var random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
+        this.sound.play(soundFXLib[random4SoundFX]);
     }
 }
