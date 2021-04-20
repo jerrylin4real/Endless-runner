@@ -19,7 +19,7 @@ You can use Python as a web server to host the game locally:
 Hours taken: 12+
 
 Features implemented:
-`Total score earned: 120`
+`Total score targeted: 120`
 
  - Track a high score that persists across scenes and display it in the UI (5)
  - Allow the player to control the Rocket after it's fired (5)
