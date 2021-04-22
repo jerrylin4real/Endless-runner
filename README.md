@@ -1,22 +1,21 @@
-# Second CMPM120 Project: Rocket_Patrol_Mod
+# Third CMPM120 Project: Endless-runner
 Author: Leland Jin 
-Date: April 19, 2021
-SID:    nli32 
+Date: April 23, 2021 
 Spring 2021  
 
 ---
 ### Note:
 Public GitHub repository:
-https://github.com/leland-jin/Rocket_Patrol_Mod
+
 
 GitHub page:
 
-https://leland-jin.github.io/Rocket_Patrol_Mod/
+
 
 You can use Python as a web server to host the game locally:
 `python3 -m http.server`
 
-Hours taken: 12+
+Hours taken: 
 
 Features implemented:
 `Total score targeted: 120`
@@ -34,17 +33,9 @@ Features implemented:
  - Create and implement a new weapon (w/ new behavior and graphics) (20)
 
 
-
-
-
 ---
 ### Reference:
- - https://stackoverflow.com/questions/37408825/create-a-high-score-in-phaser`
- - https://stackoverflow.com/questions/39787647/switch-does-not-work-with-math-random-numbers
- - https://phaser.discourse.group/t/countdown-timer/2471/4
- - http://millionthvector.blogspot.com/p/free-sprites.html
- - https://stackoverflow.com/questions/56220214/how-to-correctly-resize-images-to-retain-quality-in-phaser-3
- - https://www.pikpng.com/downpngs/hRJooow_turbulence-explosion-sprite-sheet-png-clipart/
+ - Leland's Rocket-Patrol-Mod
 
 ### Credit
   - Works by MillionthVector:
