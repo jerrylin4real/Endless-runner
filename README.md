@@ -10,7 +10,7 @@ https://github.com/jerrylin4real/Endless-runner
 
 GitHub page:
 
-Group Google drive;
+Group Google drive:
 https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing
 
 You can use Python as a web server to host the game locally:
