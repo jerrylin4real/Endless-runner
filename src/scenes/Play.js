@@ -185,7 +185,7 @@ class Play extends Phaser.Scene {
 
         if (this.initialTime <= 0) {
             this.add.text(game.config.width / 2, game.config.height / 2, 'GAME OVER', this.scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or ← to Menu', this.scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width / 2, game.config.height / 2 + 64, 'Press (R) to Restart or（M）to Menu', this.scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }
         // Pause feature
