@@ -8,7 +8,8 @@ Spring 2021
 Public GitHub repository:
 https://github.com/jerrylin4real/Endless-runner
 
-GitHub page:https://jerrylin4real.github.io/Endless-runner/
+GitHub page:
+https://jerrylin4real.github.io/Endless-runner/
 
 Group Google drive:
 https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing
@@ -21,8 +22,8 @@ Hours taken:
  - code for Alpha v0.1: 1 hour
 
 Features implemented:
- `Players can now move up，down, left, or right`
- `Collide and the game is over!`
+ - Players can now move up，down, left, or right
+ - Collide and the game is over!
 
 Features proposed:
  - gravity
