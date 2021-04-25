@@ -8,7 +8,7 @@ Spring 2021
 Public GitHub repository:
 https://github.com/jerrylin4real/Endless-runner
 
-GitHub page:
+GitHub page:https://jerrylin4real.github.io/Endless-runner/
 
 Group Google drive:
 https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing
