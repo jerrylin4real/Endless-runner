@@ -28,7 +28,7 @@ class Play extends Phaser.Scene {
 
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
-        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12});
+        this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
     }
     // Note: The keyword 'this' refers to the class 'Play'
@@ -62,11 +62,11 @@ class Play extends Phaser.Scene {
 
         this.p2Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(490, 0);
 
-        // add Spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, borderUISize * 5 + borderPadding * 2, 'spaceship', 0, 20, 2).setOrigin(0, 0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize * 6 + borderPadding * 4, 'spaceship', 0, 10, 1).setOrigin(0, 0);
-        this.ship04 = new Spaceship(this, game.config.width, borderUISize * 2 + 45, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
+        // add Spaceships (x)
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, game.config.height - borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize * 3, game.config.height - borderUISize * 4, 'spaceship', 0, 20, 2).setOrigin(0, 0);
+        this.ship03 = new Spaceship(this, game.config.width, game.config.height - borderUISize * 6, 'spaceship', 0, 10, 1).setOrigin(0, 0);
+        this.ship04 = new Spaceship(this, game.config.width, game.config.height - borderUISize * 10, 'smallfreighterspr', 0, 100, 10).setOrigin(0, 0);
         this.ship04.moveSpeed = 10;
 
         // define keys
@@ -83,6 +83,8 @@ class Play extends Phaser.Scene {
         keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyV = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.V);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
 
         // animation config
         this.anims.create({
@@ -127,7 +129,7 @@ class Play extends Phaser.Scene {
             color: 'red', // color hex code: black
             fixedWidth: 150
         }
-        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: F <- ->', redConfig);
+        this.moveText = this.add.text(230, borderUISize + borderPadding + 15, 'Move: ← ↑ ↓ →', redConfig);
         this.quitText = this.add.text(250, borderUISize + borderPadding + 35, 'Quit: Q', redConfig);
 
         // GAME OVER flag
@@ -213,11 +215,12 @@ class Play extends Phaser.Scene {
             this.bgmPlayed = false;
         }
 
+        // options after game is over
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
 
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
             this.scene.start("menuScene");
         }
 
@@ -341,8 +344,12 @@ class Play extends Phaser.Scene {
         ];
         let random4SoundFX = Math.floor(Math.random() * soundFXLib.length);
         this.sound.play(soundFXLib[random4SoundFX]);
+
+        // crash should minus life / end the game
+        this.gameOver = true;
+        this.initialTime = 0;
         // add time bonus
-        this.initialTime += ship.timeBonus;
+        //this.initialTime += ship.timeBonus;
     }
 
     shipExplode2(ship) {
