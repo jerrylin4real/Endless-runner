@@ -31,7 +31,7 @@ class Menu extends Phaser.Scene {
     }
 
     // show menu text
-    this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'ROCKET PATROL?!', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'Endless Runner!', menuConfig).setOrigin(0.5);
     this.add.text(game.config.width / 2, game.config.height / 2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
     menuConfig.backgroundColor = '#00FF00';
     menuConfig.color = '#000';
@@ -41,6 +41,7 @@ class Menu extends Phaser.Scene {
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+    keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
   }
 
@@ -64,6 +65,7 @@ class Menu extends Phaser.Scene {
       this.scene.start("playScene");
     }
 
+    
     if (Phaser.Input.Keyboard.JustDown(keyUP)) {
       // Quick Test mode
       game.settings = { // a list of settings
