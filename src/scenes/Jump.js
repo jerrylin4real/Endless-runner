@@ -74,7 +74,7 @@ class Jump extends Phaser.Scene {
             this.ground.add(groundTile);
         }
 
-        // set up my alien son 👽
+        // set up character
         this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
