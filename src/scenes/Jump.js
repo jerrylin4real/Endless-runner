@@ -51,7 +51,7 @@ class Jump extends Phaser.Scene {
         }
 
         // message text
-        this.add.text(game.config.width / 2, 30, `(H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
 
         // add some physics clouds
         this.cloud01 = this.physics.add.sprite(600, 100, 'platformer_atlas', 'cloud_1');
@@ -133,7 +133,12 @@ class Jump extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             // After 2000 ms or 2 second, call onEvent
             console.log("game restarting");
-            this.restartGameEvent = this.time.addEvent({ delay: 2000, callback: this.scene.restart(), callbackScope: this, loop: false });
+            this.restartGameEvent = this.time.addEvent({ delay: 3000, callback: this.scene.restart(), callbackScope: this, loop: false });
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            // After 2000 ms or 2 second, call onEvent
+            console.log("Loading Menu Scene");
+            this.scene.start("menuScene");
         }
 
         if (cursors.left.isDown) {
