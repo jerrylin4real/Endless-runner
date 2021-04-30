@@ -1,3 +1,11 @@
+/*************************************************
+* main.js Header
+*   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery - Character Artist), Qijun Lin (Jerry - Background Artist)
+    game title: Undecided Endless Runner
+    date completed: May 5, 2021
+    creative tilt justification:
+*
+*/
 let config = {
   type: Phaser.CANVAS,
   width: 640,
