@@ -1,7 +1,7 @@
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
-        this.guiGenerated = false;
+        this.guiGenerated = false;  // change to true before submitting.
     }
 
     preload() {

@@ -24,8 +24,15 @@ Features implemented:
  - Players can now move up，down, left, or right
  - Collide and the game is over!
 
-Features proposed:
- - gravity
+### Change log:
+
+`Alpha v0.2`: April 30, 2021
+ - Applyed jump.js
+ - now character can jump
+ - three keys binded to the game:(M)enu; (R)estart; (H)ide dat.gui
+
+`Alpha v0.1`: April 27, 2021
+ - Initialized the game
 
 ---
 ### Reference:
