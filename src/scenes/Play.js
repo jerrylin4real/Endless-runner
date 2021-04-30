@@ -18,6 +18,8 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
+      
+        
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('rocket2', './assets/rocket2.png');
@@ -30,20 +32,87 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('explosion', './assets/explosion.png', { frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9 });
         this.load.spritesheet('explosion2', './assets/explosion2.png', { frameWidth: 100, frameHeight: 90, startFrame: 0, endFrame: 12 });
         this.load.audio('bgm', './assets/mixkit-space-game-668.wav');
+     
+        /* set load path
+        this.load.path = 'assets/'; // Buggy for Rocket Patrol Mod adaptation now
+        this.load.atlas('platformer_atlas', 'kenny_sheet.png', 'kenny_sheet.json'); // from ./utility/jump.js
+        */
     }
     // Note: The keyword 'this' refers to the class 'Play'
 
 
     create() {
-        this.bgmPlayed = false;
-        this.bgmCreated = false;
-        this.hasted = false;
+         // variables and settings (jump included)
+         this.ACCELERATION = 1500;
+         this.MAX_X_VEL = 500;   // pixels/second
+         this.MAX_Y_VEL = 5000;
+         this.DRAG = 600;    // DRAG < ACCELERATION = icy slide
+         this.MAX_JUMPS = 2; // change for double/triple/etc. double jumps 
+         this.JUMP_VELOCITY = -700;
+         this.Y_GRAVITY = 2600;
+         this.WORLD_COLLIDE = true;
+         this.physicsDebug = true;
+         this.BGcolor = '#223344';
+
+         this.bgmPlayed = false;
+         this.bgmCreated = false;
+         this.hasted = false;
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
         this.hasteCounter = 0; // Increase ships' movespeed if >= 30.
-        this.superWeaponCount = 0;
+        // this.superWeaponCount = 0;
 
+         // setup dat.gui
+         this.gui = new dat.GUI();
+         let playerFolder = this.gui.addFolder('Player Parameters');
+         playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
+         playerFolder.add(this, 'DRAG', 0, 1000).step(50);
+         playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
+         playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
+         playerFolder.open();
+ 
+         let settingsFolder = this.gui.addFolder('Settings');
+         settingsFolder.add(this, 'Y_GRAVITY', 0, 5000).step(50);
+         settingsFolder.addColor(this, 'BGcolor');
+         settingsFolder.add(this, 'WORLD_COLLIDE');
+        
+         // set bg color
+        this.cameras.main.setBackgroundColor(this.BGcolor);
+
+        // draw grid lines for jump height reference
+        let graphics = this.add.graphics();
+        graphics.lineStyle(2, 0xFFFFFF, 0.1);
+	    for(let y = game.config.height-70; y >= 35; y -= 35) {
+            graphics.lineBetween(0, y, game.config.width, y);
+        }
+
+        // message text
+        this.add.text(game.config.width/2, 30, `(H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        
+        /* add some physics clouds
+        this.cloud01 = this.physics.add.sprite(600, 100, 'platformer_atlas', 'cloud_1');
+        this.cloud01.body.setAllowGravity(false).setVelocityX(25);
+        this.cloud02 = this.physics.add.sprite(200, 200, 'platformer_atlas', 'cloud_2');
+        this.cloud02.body.setAllowGravity(false).setVelocityX(45);
+       
+
+        
+        // make ground tiles group
+        this.ground = this.add.group();
+        for(let i = 0; i < game.config.width; i += tileSize) {
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'platformer_atlas', 'block').setScale(SCALE).setOrigin(0);
+            groundTile.body.immovable = true;
+            groundTile.body.allowGravity = false;
+            this.ground.add(groundTile);
+        }
+        for(let i = tileSize*2; i < game.config.width-tileSize*13; i += tileSize) {
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize*9, 'platformer_atlas', 'block').setScale(SCALE).setOrigin(0);
+            groundTile.body.immovable = true;
+            groundTile.body.allowGravity = false;
+            this.ground.add(groundTile);
+        }
+        */
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
@@ -56,10 +125,11 @@ class Play extends Phaser.Scene {
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0x3e5861).setOrigin(0, 0);
 
-        // add Rockets for player(s) 
-        this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
-
-        this.p2Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(490, 0);
+        // add Rockets/character for player(s) 
+        // this.p1Rocket = new Rocket(this, game.config.width / 2, game.config.height - borderUISize - borderPadding - 10, 'rocket2').setOrigin(0.5, 0);
+        this.p1Rocket = this.physics.add.sprite(game.config.width/2, game.config.height/2, 'rocket2').setScale(SCALE);
+        this.p1Rocket.setCollideWorldBounds(this.WORLD_COLLIDE); // Bound character in the gameworld
+        this.p1Rocket.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
         // add Spaceships (x)
         this.ship01 = new Spaceship(this, game.config.width + borderUISize * 6, game.config.height - borderUISize * 5, 'speedship', 0, 30, 3).setOrigin(0, 0);
@@ -159,7 +229,7 @@ class Play extends Phaser.Scene {
             }
             this.bgm = this.sound.add('bgm', {
                 mute: false,
-                volume: 0.7,
+                volume: 0.4,
                 rate: 1,
                 loop: true,
                 delay: 0
@@ -169,7 +239,14 @@ class Play extends Phaser.Scene {
         } else {
             // Resume bgm if bgm exists
             this.bgm.resume();
-        }
+        }        
+        
+        // set up Phaser-provided cursor key input
+        cursors = this.input.keyboard.createCursorKeys();
+
+        // add physics collider
+        this.physics.add.collider(this.p1Rocket, this.ground);
+
     }
 
 
