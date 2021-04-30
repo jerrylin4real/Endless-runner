@@ -5,21 +5,18 @@ Spring 2021
 
 ---
 ### Note:
-Public GitHub repository:
-https://github.com/jerrylin4real/Endless-runner
+[Public GitHub repository](https://github.com/jerrylin4real/Endless-runner)
 
-GitHub page:
-https://jerrylin4real.github.io/Endless-runner/
+[GitHub page](https://jerrylin4real.github.io/Endless-runner/)
 
-Group Google drive:
-https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing
+[Group Google drive](https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing)
 
 You can use Python as a web server to host the game locally:
 `python3 -m http.server`
 
 Hours taken: 
  - storyboard: about 2 hours
- - code for Alpha v0.1: 1 hour
+ - code for Alpha v0.1: 1 hour 
 
 Features implemented:
  - Players can now move up，down, left, or right
@@ -30,15 +27,11 @@ Features proposed:
 
 ---
 ### Reference:
- - Leland's Rocket-Patrol-Mod
+ - [Leland's Rocket-Patrol-Mod](https://github.com/leland-jin/Rocket_Patrol_Mod)
+ - [Nathan's Utilities](https://github.com/nathanaltice/Utilities)
 
 ### Credit
-  - Works by MillionthVector:
-    - rocket2.png
-    - speedship.png
-    - smallfreighterspr.png
-    -
+
 
 ### Copyright-Free SoundFX:
- - https://mixkit.co/free-sound-effects/explosion/
- - https://mixkit.co/free-stock-music/tag/space/
+ - 
