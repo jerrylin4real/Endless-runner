@@ -14,9 +14,6 @@
 let cursors;
 const SCALE = 0.5;
 const tileSize = 35;
-// set UI sizes
-let borderUISize = game.config.height / 15;
-let borderPadding = borderUISize / 3;
 
 // reserve keyboard variables
 let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
@@ -41,7 +38,7 @@ let config = {
       }
     }
   },
-  scene: [Menu, Play]
+  scene: [Menu, Play, Jump]
 };
 
 // Legacy config
@@ -52,8 +49,14 @@ let configOld = {
   scene: [Menu, Play]
 }
 
-var game = new Phaser.Game(configold);
-var newgame = new Phaser.Game(config);
+
+var game = new Phaser.Game(config);
+// var oldgame = new Phaser.Game(configOld);
+
+// set UI sizes
+let borderUISize = game.config.height / 15;
+let borderPadding = borderUISize / 3;
+
 
 
 
