@@ -1,0 +1,41 @@
+{
+	"textures": [
+		{
+			"image": "jingling.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1680,
+				"h": 232
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "renwu.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 1816,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 111,
+						"y": 163,
+						"w": 1678,
+						"h": 230
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1678,
+						"h": 230
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:039aa8c373bee8c79aca6c1f08265b51:979ec49ddb97eee520322f79afa0243f:b468d5e61861e22fa495d6f659242ee6$"
+	}
+}
