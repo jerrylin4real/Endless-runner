@@ -1,6 +1,7 @@
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
+        this.guiGenerated = false;
     }
 
     preload() {
@@ -23,18 +24,21 @@ class Jump extends Phaser.Scene {
         this.BGcolor = '#223344';
 
         // setup dat.gui
-        this.gui = new dat.GUI();
-        let playerFolder = this.gui.addFolder('Player Parameters');
-        playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
-        playerFolder.add(this, 'DRAG', 0, 1000).step(50);
-        playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
-        playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
-        playerFolder.open();
+        if (this.guiGenerated == false) {
+            this.gui = new dat.GUI();
+            let playerFolder = this.gui.addFolder('Player Parameters');
+            playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
+            playerFolder.add(this, 'DRAG', 0, 1000).step(50);
+            playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
+            playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
+            playerFolder.open();
 
-        let settingsFolder = this.gui.addFolder('Settings');
-        settingsFolder.add(this, 'Y_GRAVITY', 0, 5000).step(50);
-        settingsFolder.addColor(this, 'BGcolor');
-        settingsFolder.add(this, 'WORLD_COLLIDE');
+            let settingsFolder = this.gui.addFolder('Settings');
+            settingsFolder.add(this, 'Y_GRAVITY', 0, 5000).step(50);
+            settingsFolder.addColor(this, 'BGcolor');
+            settingsFolder.add(this, 'WORLD_COLLIDE');
+            this.guiGenerated = true; // prevent multiple gui on screen
+        }
 
         // set bg color
         this.cameras.main.setBackgroundColor(this.BGcolor);
