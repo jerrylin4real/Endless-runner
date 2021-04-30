@@ -6,13 +6,8 @@ class Menu extends Phaser.Scene {
   preload() {
     // load audio
 
-    this.load.audio('sfx_select', './assets/blip_select12.wav');
-    this.load.audio('sfx_explosion0', './assets/explosion38.wav');
-    this.load.audio('sfx_explosion_spell', './assets/mixkit-explosion-spell-1685.wav');
-    this.load.audio('sfx_explosion_sea-mine', './assets/mixkit-sea-mine-explosion-1184.wav');
-    this.load.audio('sfx_explosion_shot-light', './assets/mixkit-shot-light-explosion-1682.wav');
-    this.load.audio('sfx_explosion_crash', './assets/mixkit-truck-crash-with-explosion-1616.wav');
-    this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+    // this.load.audio('sfx_select', './assets/blip_select12.wav');
+
   }
 
   create() {
@@ -46,43 +41,14 @@ class Menu extends Phaser.Scene {
   }
 
   update() {
-    if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
-      // Novice mode
-      game.settings = {
-        spaceshipSpeed: 3,
-        gameTimer: 60 // 60 second
-      }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");
-    }
-    if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
-      // Expert mode
-      game.settings = {
-        spaceshipSpeed: 4,
-        gameTimer: 45
-      }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");
-    }
 
-    
     if (Phaser.Input.Keyboard.JustDown(keyUP)) {
       // Alien Test mode
       game.settings = { // a list of settings
 
       }
-      this.sound.play('sfx_select');
+      //this.sound.play('sfx_select');
       this.scene.start("jumpScene");
-    }
-
-    if (Phaser.Input.Keyboard.JustDown(keyM)) {
-      // Simultaneous two-player mode
-      game.settings = {
-        spaceshipSpeed: 5,
-        gameTimer: 120
-      }
-      this.sound.play('sfx_select');
-      this.scene.start("playScene");
     }
 
   }

@@ -1,9 +1,9 @@
 /*******************************************************************************************************************************
 * main.js Header
-*   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery - Character Artist), Qijun Lin (Jerry - Background Artist)
+*   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery-Character Artist), Qijun Lin (Jerry - Artist/programmer)
 *   game title: Undecided Endless Runner
 *   date completed: May 5, 2021
-*  creative tilt justification:
+*   creative tilt justification:
 ********************************************************************************************************************************
 */
 
@@ -20,6 +20,8 @@ let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ,
 
 // global variables/storages
 localStorage.setItem("RocketPatrolTopScore", 0);
+//localStorage.setItem("RocketPatrolTopScore", 0);
+
 // localStorage.setItem("RocketPatrolSettings", {});
 
 

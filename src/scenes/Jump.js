@@ -1,6 +1,7 @@
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
+        this.guiGenerated = false;
     }
 
     preload() {
@@ -21,21 +22,23 @@ class Jump extends Phaser.Scene {
         this.WORLD_COLLIDE = true;
         this.physicsDebug = true;
         this.BGcolor = '#223344';
-        this.paused = false; // Game is initially not paused
 
         // setup dat.gui
-        this.gui = new dat.GUI();
-        let playerFolder = this.gui.addFolder('Player Parameters');
-        playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
-        playerFolder.add(this, 'DRAG', 0, 1000).step(50);
-        playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
-        playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
-        playerFolder.open();
+        if (this.guiGenerated == false) {
+            this.gui = new dat.GUI();
+            let playerFolder = this.gui.addFolder('Player Parameters');
+            playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
+            playerFolder.add(this, 'DRAG', 0, 1000).step(50);
+            playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
+            playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
+            playerFolder.open();
 
-        let settingsFolder = this.gui.addFolder('Settings');
-        settingsFolder.add(this, 'Y_GRAVITY', 0, 5000).step(50);
-        settingsFolder.addColor(this, 'BGcolor');
-        settingsFolder.add(this, 'WORLD_COLLIDE');
+            let settingsFolder = this.gui.addFolder('Settings');
+            settingsFolder.add(this, 'Y_GRAVITY', 0, 5000).step(50);
+            settingsFolder.addColor(this, 'BGcolor');
+            settingsFolder.add(this, 'WORLD_COLLIDE');
+            this.guiGenerated = true; // prevent multiple gui on screen
+        }
 
         // set bg color
         this.cameras.main.setBackgroundColor(this.BGcolor);
@@ -48,7 +51,7 @@ class Jump extends Phaser.Scene {
         }
 
         // message text
-        this.add.text(game.config.width / 2, 30, `(H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
 
         // add some physics clouds
         this.cloud01 = this.physics.add.sprite(600, 100, 'platformer_atlas', 'cloud_1');
@@ -116,8 +119,6 @@ class Jump extends Phaser.Scene {
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-
-
     }
 
     update() {
@@ -130,9 +131,14 @@ class Jump extends Phaser.Scene {
 
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.
-            console.log("game restarted");
-            
+            // After 2000 ms or 2 second, call onEvent
+            console.log("game restarting");
+            this.restartGameEvent = this.time.addEvent({ delay: 3000, callback: this.scene.restart(), callbackScope: this, loop: false });
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            // After 2000 ms or 2 second, call onEvent
+            console.log("Loading Menu Scene");
+            this.scene.start("menuScene");
         }
 
         if (cursors.left.isDown) {
