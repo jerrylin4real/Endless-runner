@@ -21,7 +21,6 @@ class Jump extends Phaser.Scene {
         this.WORLD_COLLIDE = true;
         this.physicsDebug = true;
         this.BGcolor = '#223344';
-        this.paused = false; // Game is initially not paused
 
         // setup dat.gui
         this.gui = new dat.GUI();
@@ -116,8 +115,6 @@ class Jump extends Phaser.Scene {
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
-
-
     }
 
     update() {
@@ -130,9 +127,9 @@ class Jump extends Phaser.Scene {
 
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.
-            console.log("game restarted");
-            
+            // After 2000 ms or 2 second, call onEvent
+            console.log("game restarting");
+            this.restartGameEvent = this.time.addEvent({ delay: 2000, callback: this.scene.restart(), callbackScope: this, loop: false });
         }
 
         if (cursors.left.isDown) {
