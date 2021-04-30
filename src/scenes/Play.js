@@ -38,7 +38,6 @@ class Play extends Phaser.Scene {
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.hasted = false;
-        this.superWeaponRewarded = false;
 
         // Add time counters
         this.initialTime = game.settings.gameTimer;
@@ -86,7 +85,7 @@ class Play extends Phaser.Scene {
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 
 
-        // animation config
+        // animation configs
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0 }),
@@ -295,10 +294,6 @@ class Play extends Phaser.Scene {
             this.countdownText.setText('Countdown: ' + this.formatTime(this.initialTime));
             if (this.hasted == false) {
                 this.hasteCounter += 1;
-            }
-            if (this.p1Score >= 30 && this.p1Score <= 100 && !this.superWeaponRewarded) {
-                this.superWeaponRewarded = true;
-                this.superWeaponCount += 1;
             }
             this.superWeaponText.setText('Superweapon(V): ' + this.superWeaponCount);
         }
