@@ -1,5 +1,5 @@
 # Third CMPM120 Project: Endless-runner
-Group members: Leland Jin, Qingzhao Cao (Lackery), Qijun Lin (Jerry) \
+Group members: Leland Jin, Qingzhao Cao (Lakery), Qijun Lin (Jerry) \
 Date: April 25, 2021 \
 Spring 2021  
 
