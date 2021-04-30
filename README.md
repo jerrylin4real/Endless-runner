@@ -11,6 +11,8 @@ Spring 2021
 
 [Group Google drive](https://drive.google.com/drive/folders/1LijsrfzSWCdaeOUw5U0vMBAvk3ea-l3I?usp=sharing)
 
+[Job Assignment](https://github.com/jerrylin4real/Endless-runner/issues)
+
 You can use Python as a web server to host the game locally:
 `python3 -m http.server`
 
