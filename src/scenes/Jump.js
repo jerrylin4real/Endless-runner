@@ -109,6 +109,12 @@ class Jump extends Phaser.Scene {
 
         // add physics collider
         this.physics.add.collider(this.alien, this.ground);
+        
+        // Define keys 
+        keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
+
+
     }
 
     update() {
@@ -118,6 +124,12 @@ class Jump extends Phaser.Scene {
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
 
         // check keyboard input
+
+        // press R to restart the game
+        if (Phaser.Input.Keyboard.JustDown(keyR)) {
+            this.scene.restart();
+        }
+
         if(cursors.left.isDown) {
             this.alien.body.setAccelerationX(-this.ACCELERATION);
             this.alien.setFlip(true, false);
