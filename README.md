@@ -1,6 +1,6 @@
-# Third CMPM120 Project: Endless-runner
+# Third CMPM120 Project: Neon-Runner
 Group members: Leland Jin, Qingzhao Cao (Lakery), Qijun Lin (Jerry) \
-Date: April 30, 2021 
+Date: May 4, 2021 
 
 ---
 ### Note:
