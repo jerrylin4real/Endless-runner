@@ -19,7 +19,7 @@ Hours taken:
  - storyboard: about 2 hours
  - code for Alpha v0.1: 1 hour 
 
-Features implemented:
+Features matched:
  - Players can now move up，down, left, or right
  - Collide and the game is over!
 
