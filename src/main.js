@@ -1,8 +1,8 @@
 /*******************************************************************************************************************************
 * main.js Header
 *   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery-Character Artist), Qijun Lin (Jerry - Artist/programmer)
-*   game title: Undecided Endless Runner
-*   date completed: May 5, 2021
+*   game title: Neon Runner
+*   date completed: May 4, 2021
 *   creative tilt justification:
 ********************************************************************************************************************************
 */
