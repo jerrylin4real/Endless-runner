@@ -28,7 +28,7 @@ class Menu extends Phaser.Scene {
     }
     this.add.image(410, 250, 'menu_background');
     // show menu text
-    menuConfig.backgroundColor = '#00FF00';
+    menuConfig.backgroundColor = 'yellow';
     menuConfig.color = '#000';
     this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding - 20, 'Press ↑ to Play', menuConfig).setOrigin(0.5);
 
