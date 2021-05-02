@@ -1,7 +1,6 @@
-# Third CMPM120 Project: Endless-runner
+# Third CMPM120 Project: Neon-Runner
 Group members: Leland Jin, Qingzhao Cao (Lakery), Qijun Lin (Jerry) \
-Date: April 25, 2021 \
-Spring 2021  
+Date: May 4, 2021 
 
 ---
 ### Note:
@@ -20,7 +19,7 @@ Hours taken:
  - storyboard: about 2 hours
  - code for Alpha v0.1: 1 hour 
 
-Features implemented:
+Features matched:
  - Players can now move up，down, left, or right
  - Collide and the game is over!
 

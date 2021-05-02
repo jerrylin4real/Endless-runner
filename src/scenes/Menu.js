@@ -5,8 +5,10 @@ class Menu extends Phaser.Scene {
 
   preload() {
     // load audio
-
     // this.load.audio('sfx_select', './assets/blip_select12.wav');
+
+    // load image
+    this.load.image('menu_background', 'assets/menus.png');
 
   }
 
@@ -24,13 +26,11 @@ class Menu extends Phaser.Scene {
       },
       fixedWidth: 0
     }
-
+    this.add.image(410, 250, 'menu_background');
     // show menu text
-    this.add.text(game.config.width / 2, game.config.height / 2 - borderUISize - borderPadding, 'Endless Runner!', menuConfig).setOrigin(0.5);
-    this.add.text(game.config.width / 2, game.config.height / 2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
-    menuConfig.backgroundColor = '#00FF00';
+    menuConfig.backgroundColor = 'yellow';
     menuConfig.color = '#000';
-    this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding, 'Press ↑ to test jump.js', menuConfig).setOrigin(0.5);
+    this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding - 20, 'Press ↑ to Play', menuConfig).setOrigin(0.5);
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);

@@ -54,10 +54,10 @@ class Jump extends Phaser.Scene {
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
 
         // add some physics clouds
-        this.cloud01 = this.physics.add.sprite(600, 100, 'platformer_atlas', 'cloud_1');
-        this.cloud01.body.setAllowGravity(false).setVelocityX(25);
-        this.cloud02 = this.physics.add.sprite(200, 200, 'platformer_atlas', 'cloud_2');
-        this.cloud02.body.setAllowGravity(false).setVelocityX(45);
+        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_atlas', 'cloud_1');
+        this.cloud01.body.setAllowGravity(false).setVelocityX(-180);
+        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_atlas', 'cloud_2');
+        this.cloud02.body.setAllowGravity(false).setVelocityX(-350);
 
         // make ground tiles group
         this.ground = this.add.group();
@@ -74,7 +74,7 @@ class Jump extends Phaser.Scene {
             this.ground.add(groundTile);
         }
 
-        // set up my alien son 👽
+        // set up character
         this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
