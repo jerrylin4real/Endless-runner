@@ -1,0 +1,170 @@
+{
+	"textures": [
+		{
+			"image": "run.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1040,
+				"h": 212
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "jingling -(2).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 150,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 179,
+						"w": 146,
+						"h": 210
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 146,
+						"h": 210
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5123239436619719
+					}
+				},
+				{
+					"filename": "jingling -(5).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 167,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 179,
+						"w": 144,
+						"h": 210
+					},
+					"frame": {
+						"x": 149,
+						"y": 1,
+						"w": 144,
+						"h": 210
+					},
+					"anchor": {
+						"x": 0.5029940119760479,
+						"y": 0.5158450704225352
+					}
+				},
+				{
+					"filename": "jingling -(4).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 178,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 191,
+						"w": 172,
+						"h": 194
+					},
+					"frame": {
+						"x": 295,
+						"y": 1,
+						"w": 172,
+						"h": 194
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5088028169014085
+					}
+				},
+				{
+					"filename": "jingling -(7).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 186,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 187,
+						"w": 170,
+						"h": 190
+					},
+					"frame": {
+						"x": 469,
+						"y": 1,
+						"w": 170,
+						"h": 190
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5105633802816901
+					}
+				},
+				{
+					"filename": "jingling - (6).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 203,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 179,
+						"w": 198,
+						"h": 178
+					},
+					"frame": {
+						"x": 641,
+						"y": 1,
+						"w": 198,
+						"h": 178
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
+					"filename": "jingling -(3).png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 207,
+						"h": 568
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 179,
+						"w": 198,
+						"h": 178
+					},
+					"frame": {
+						"x": 841,
+						"y": 1,
+						"w": 198,
+						"h": 178
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:70bb9ed120ca638c06d80c3c497cbaf1:584534ec9a6570b11c68679abf08ed0e:0bfa41ad2432204f88f9f54b9f6b3241$"
+	}
+}
