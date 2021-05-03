@@ -39,7 +39,7 @@ Features matched:
  - [Nathan's Utilities](https://github.com/nathanaltice/Utilities)
 
 ### Credit
-
-
+ - In game arts by Lakery
+ 
 ### Copyright-Free SoundFX:
  - 
