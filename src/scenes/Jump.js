@@ -1,7 +1,9 @@
+// A play scene with jump implemented
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
         this.guiGenerated = false;  // change to true before submitting.
+
     }
 
     preload() {
@@ -12,6 +14,7 @@ class Jump extends Phaser.Scene {
 
     create() {
         // variables and settings
+
         this.ACCELERATION = 1500;
         this.MAX_X_VEL = 500;   // pixels/second
         this.MAX_Y_VEL = 5000;
@@ -19,9 +22,14 @@ class Jump extends Phaser.Scene {
         this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀️
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
+        this.gameOver = false;
         this.WORLD_COLLIDE = true;
         this.physicsDebug = true;
+        this.initialTime = 0;
+
         this.BGcolor = '#223344';
+
+
 
         // setup dat.gui
         if (this.guiGenerated == false) {
@@ -52,6 +60,9 @@ class Jump extends Phaser.Scene {
 
         // message text
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.timeText = this.add.text(500, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
+        // For each 1000 ms or 1 second, call onEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
 
         // add some physics clouds
         this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_atlas', 'cloud_1');
@@ -131,12 +142,12 @@ class Jump extends Phaser.Scene {
 
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
-            // After 2000 ms or 2 second, call onEvent
-            console.log("game restarting");
-            this.restartGameEvent = this.time.addEvent({ delay: 3000, callback: this.scene.restart(), callbackScope: this, loop: false });
+            console.log("game restarted");
+            this.gameOver = true;
+            this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
+
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
-            // After 2000 ms or 2 second, call onEvent
             console.log("Loading Menu Scene");
             this.scene.start("menuScene");
         }
@@ -180,5 +191,29 @@ class Jump extends Phaser.Scene {
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
+
+
+
     }
+    formatTime(seconds) {
+        // Minutes
+        var minutes = Math.floor(seconds / 60);
+        // Seconds
+        var partInSeconds = seconds % 60;
+        // Adds left zeros to seconds
+        partInSeconds = partInSeconds.toString().padStart(2, '0');
+        // Returns formated time
+        return `${minutes}:${partInSeconds}`;
+    }
+
+    onEvent() {
+
+        if (!this.gameOver) {
+            this.update();
+            this.initialTime += 1;
+            console.log("initialTime: " + this.initialTime); // debug only
+            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
+        }
+    }
+
 }
