@@ -74,8 +74,8 @@ class Jump extends Phaser.Scene {
 
         this.timeText = this.add.text(450, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
 
-        // For each 1000 ms or 1 second, call onEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
+        // For each 1000 ms or 1 second, call ontimedEvent
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
 
         // add some physics clouds
         this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_atlas', 'cloud_1');
@@ -99,7 +99,7 @@ class Jump extends Phaser.Scene {
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE * 2);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'walk0001').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -135,8 +135,12 @@ class Jump extends Phaser.Scene {
         // set up Phaser-provided cursor key input
         cursors = this.input.keyboard.createCursorKeys();
 
-        // add physics collider
+        // add physics colliders
         this.physics.add.collider(this.alien, this.ground);
+        this.physics.add.collider(this.alien, this.cloud01);
+        this.physics.add.collider(this.alien, this.cloud02);
+
+
 
         // Define keys 
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
@@ -170,7 +174,7 @@ class Jump extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(this.BGcolor);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
 
-        // check keyboard input
+        // check keyboard input ...
 
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
@@ -180,7 +184,7 @@ class Jump extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             this.pauseBGM();
 
-            console.log("Loading Menu Scene");
+            console.log("Loaded Menu Scene");
             this.scene.start("menuScene");
         }
 
@@ -236,7 +240,7 @@ class Jump extends Phaser.Scene {
             // pause bgm if it is created
             this.pauseBGM();
 
-            // initialize time and restart game
+            // reinitialize time and restart game
             this.initialTime = 0;
             this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
         }
@@ -259,12 +263,12 @@ class Jump extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    onEvent() {
+    ontimedEvent() {
 
         if (!this.gameOver) {
             this.update();
             this.initialTime += 1;
-            console.log("initialTime: " + this.initialTime); // debug only
+            // console.log("initialTime: " + this.initialTime); // debug time 
             this.timeText.setText('Cur_Time: ' + this.formatTime(this.initialTime));
         }
     }
