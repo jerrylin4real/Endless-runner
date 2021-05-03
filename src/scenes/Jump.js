@@ -13,7 +13,7 @@ class Jump extends Phaser.Scene {
 
         this.load.path = 'assets/';
         this.load.atlas('platformer_atlas', 'kenny_sheet.png', 'kenny_sheet.json');
-
+        this.load.atlas('platformer_kenny', 'kenny.png', 'kenny.json');
     }
 
     create() {
@@ -78,10 +78,12 @@ class Jump extends Phaser.Scene {
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
 
         // add some physics clouds
-        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_atlas', 'cloud_1');
+        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_kenny', 'enemy.png');
         this.cloud01.body.setAllowGravity(false).setVelocityX(-180);
-        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_atlas', 'cloud_2');
-        this.cloud02.body.setAllowGravity(false).setVelocityX(-350);
+        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_kenny', 'enemy.png');
+        this.cloud02.body.setAllowGravity(false).setVelocityX(-300);
+        this.cloud03 = this.physics.add.sprite(400, 200, 'platformer_kenny', 'enemy.png');
+        this.cloud03.body.setAllowGravity(false).setVelocityX(-300);
 
         // make ground tiles group
         this.ground = this.add.group();
@@ -99,7 +101,7 @@ class Jump extends Phaser.Scene {
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'walk0001').setScale(SCALE * 2);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_character', 'stand02.png').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -139,7 +141,7 @@ class Jump extends Phaser.Scene {
         this.physics.add.collider(this.alien, this.ground);
         this.physics.add.collider(this.alien, this.cloud01);
         this.physics.add.collider(this.alien, this.cloud02);
-
+        this.physics.add.collider(this.alien, this.cloud03);
 
 
         // Define keys 
@@ -228,6 +230,7 @@ class Jump extends Phaser.Scene {
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
+        this.physics.world.wrap(this.cloud03, this.cloud03.width / 2);
 
         this.backgroundIMG.tilePositionX += 4;  // update tile sprite
 
