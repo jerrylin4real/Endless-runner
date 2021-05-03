@@ -78,11 +78,11 @@ class Jump extends Phaser.Scene {
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
 
         // add some physics clouds
-        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_kenny', 'enemy.png');
+        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer_kenny', 'enemy');
         this.cloud01.body.setAllowGravity(false).setVelocityX(-180);
-        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_kenny', 'enemy.png');
+        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_kenny', 'enemy');
         this.cloud02.body.setAllowGravity(false).setVelocityX(-300);
-        this.cloud03 = this.physics.add.sprite(400, 200, 'platformer_kenny', 'enemy.png');
+        this.cloud03 = this.physics.add.sprite(400, 200, 'platformer_kenny', 'enemy');
         this.cloud03.body.setAllowGravity(false).setVelocityX(-300);
 
         // make ground tiles group
@@ -101,7 +101,7 @@ class Jump extends Phaser.Scene {
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_character', 'stand02.png').setScale(SCALE * 2);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_kenny', 'stand02').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
