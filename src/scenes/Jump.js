@@ -8,9 +8,12 @@ class Jump extends Phaser.Scene {
 
     preload() {
         // set load path
-        this.load.image('backgroundIMG', './assets/background.png');  
+        this.load.image('backgroundIMG', './assets/background.png');
+        this.load.audio('bgm', './assets/bgm1.m4a');
+
         this.load.path = 'assets/';
         this.load.atlas('platformer_atlas', 'kenny_sheet.png', 'kenny_sheet.json');
+
     }
 
     create() {
@@ -23,6 +26,9 @@ class Jump extends Phaser.Scene {
         this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀️
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
+
+        this.bgmPlayed = false;
+        this.bgmCreated = false;
         this.gameOver = false;
         this.WORLD_COLLIDE = true;
         this.physicsDebug = true;
@@ -48,10 +54,10 @@ class Jump extends Phaser.Scene {
             settingsFolder.add(this, 'WORLD_COLLIDE');
             this.guiGenerated = true; // prevent multiple gui on screen
         }
-        
+
         // place tile sprite
         this.backgroundIMG = this.add.tileSprite(0, 0, 1338, 525, 'backgroundIMG').setOrigin(0, 0);
-        
+
         // set bg color
         this.cameras.main.setBackgroundColor(this.BGcolor);
 
@@ -67,7 +73,7 @@ class Jump extends Phaser.Scene {
         this.besttimeText = this.add.text(300, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
 
         this.timeText = this.add.text(450, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
-        
+
         // For each 1000 ms or 1 second, call onEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
 
@@ -93,7 +99,7 @@ class Jump extends Phaser.Scene {
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE*2);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -137,6 +143,25 @@ class Jump extends Phaser.Scene {
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 
+        // play background music 
+        if (this.bgmPlayed == false) {
+            if (this.bgmCreated) {
+                this.bgm.resume();
+                return;
+            }
+            this.bgm = this.sound.add('bgm', {
+                mute: false,
+                volume: 0.7,
+                rate: 1,
+                loop: true,
+                delay: 0
+            });
+            this.bgmCreated = true;
+            this.bgm.play();
+        } else {
+            // Resume bgm if bgm exists
+            this.bgm.resume();
+        }
     }
 
     update() {
@@ -153,6 +178,8 @@ class Jump extends Phaser.Scene {
             this.gameOver = true;
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.pauseBGM();
+
             console.log("Loading Menu Scene");
             this.scene.start("menuScene");
         }
@@ -197,20 +224,29 @@ class Jump extends Phaser.Scene {
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
-        
+
         this.backgroundIMG.tilePositionX += 4;  // update tile sprite
 
-        if (this.gameOver){
+        if (this.gameOver) {
             if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
                 localStorage.setItem("NeonRunnerBestTime", this.initialTime);
                 this.besttimeText.setText('Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
             }
+
+            // pause bgm if it is created
+            this.pauseBGM();
+
             // initialize time and restart game
             this.initialTime = 0;
             this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
         }
-
-
+    }
+    pauseBGM(bgm){
+        if (this.bgmCreated) {
+            this.bgm.pause()
+            this.bgmPlayed = false;
+            console.log("Paused BGM");
+        }
     }
     formatTime(seconds) {
         // Minutes
