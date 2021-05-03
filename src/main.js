@@ -19,7 +19,7 @@ const tileSize = 35;
 let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
 
 // global variables/storages
-localStorage.setItem("RocketPatrolTopScore", 0);
+localStorage.setItem("NeonRunnerBestTime", 0);
 //localStorage.setItem("RocketPatrolTopScore", 0);
 
 // localStorage.setItem("RocketPatrolSettings", {});

@@ -60,7 +60,10 @@ class Jump extends Phaser.Scene {
 
         // message text
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
-        this.timeText = this.add.text(500, borderUISize + borderPadding + 10, 'Time: ' + this.formatTime(this.initialTime));
+        this.besttimeText = this.add.text(300, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
+
+        this.timeText = this.add.text(450, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
+        
         // For each 1000 ms or 1 second, call onEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.onEvent, callbackScope: this, loop: true });
 
@@ -144,8 +147,6 @@ class Jump extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             console.log("game restarted");
             this.gameOver = true;
-            this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
-
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             console.log("Loading Menu Scene");
@@ -188,10 +189,20 @@ class Jump extends Phaser.Scene {
             this.jumping = false;
         }
 
+
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
-
+            
+        if (this.gameOver){
+            if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
+                localStorage.setItem("NeonRunnerBestTime", this.initialTime);
+                this.besttimeText.setText('Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
+            }
+            // initialize time and restart game
+            this.initialTime = 0;
+            this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
+        }
 
 
     }
@@ -212,7 +223,7 @@ class Jump extends Phaser.Scene {
             this.update();
             this.initialTime += 1;
             console.log("initialTime: " + this.initialTime); // debug only
-            this.timeText.setText('Time: ' + this.formatTime(this.initialTime));
+            this.timeText.setText('Cur_Time: ' + this.formatTime(this.initialTime));
         }
     }
 
