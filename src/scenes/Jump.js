@@ -82,6 +82,8 @@ class Jump extends Phaser.Scene {
         this.cloud01.body.setAllowGravity(false).setVelocityX(-180);
         this.cloud02 = this.physics.add.sprite(200, 360, 'platformer_atlas', 'cloud_2');
         this.cloud02.body.setAllowGravity(false).setVelocityX(-350);
+        this.cloud03 = this.physics.add.sprite(400, 200, 'platformer_atlas', 'cloud_2');
+        this.cloud03.body.setAllowGravity(false).setVelocityX(-300);
 
         // make ground tiles group
         this.ground = this.add.group();
@@ -139,6 +141,7 @@ class Jump extends Phaser.Scene {
         this.physics.add.collider(this.alien, this.ground);
         this.physics.add.collider(this.alien, this.cloud01);
         this.physics.add.collider(this.alien, this.cloud02);
+        this.physics.add.collider(this.alien, this.cloud03);
 
 
 
@@ -228,7 +231,8 @@ class Jump extends Phaser.Scene {
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
-
+        this.physics.world.wrap(this.cloud03, this.cloud03.width / 2);
+        
         this.backgroundIMG.tilePositionX += 4;  // update tile sprite
 
         if (this.gameOver) {
