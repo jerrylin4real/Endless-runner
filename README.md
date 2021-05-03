@@ -40,6 +40,7 @@ Features matched:
 
 ### Credit
  - In game arts by Lakery
+ - background music by Jerry
  
 ### Copyright-Free SoundFX:
  - 
