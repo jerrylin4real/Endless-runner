@@ -8,7 +8,7 @@ class Menu extends Phaser.Scene {
     // this.load.audio('sfx_select', './assets/blip_select12.wav');
 
     // load image
-    this.load.image('menu_background', 'assets/menus.png');
+    this.load.image('menu_background', 'assets/menu2.png');
 
   }
 
@@ -26,11 +26,14 @@ class Menu extends Phaser.Scene {
       },
       fixedWidth: 0
     }
+    // Create background img
     this.add.image(410, 250, 'menu_background');
     // show menu text
     menuConfig.backgroundColor = 'yellow';
     menuConfig.color = '#000';
-    this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding - 20, 'Press ↑ to Play', menuConfig).setOrigin(0.5);
+
+    // Legacy add text was intergrated into background
+    //this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding - 20, 'Press ↑ to Play', menuConfig).setOrigin(0.5);
 
     // define keys
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
