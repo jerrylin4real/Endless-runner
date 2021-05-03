@@ -8,6 +8,7 @@ class Jump extends Phaser.Scene {
 
     preload() {
         // set load path
+        this.load.image('backgroundIMG', './assets/background.png');  
         this.load.path = 'assets/';
         this.load.atlas('platformer_atlas', 'kenny_sheet.png', 'kenny_sheet.json');
     }
@@ -47,7 +48,10 @@ class Jump extends Phaser.Scene {
             settingsFolder.add(this, 'WORLD_COLLIDE');
             this.guiGenerated = true; // prevent multiple gui on screen
         }
-
+        
+        // place tile sprite
+        this.backgroundIMG = this.add.tileSprite(0, 0, 1338, 525, 'backgroundIMG').setOrigin(0, 0);
+        
         // set bg color
         this.cameras.main.setBackgroundColor(this.BGcolor);
 
@@ -89,7 +93,7 @@ class Jump extends Phaser.Scene {
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_atlas', 'front').setScale(SCALE*2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -193,7 +197,9 @@ class Jump extends Phaser.Scene {
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
-            
+        
+        this.backgroundIMG.tilePositionX += 4;  // update tile sprite
+
         if (this.gameOver){
             if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
                 localStorage.setItem("NeonRunnerBestTime", this.initialTime);
