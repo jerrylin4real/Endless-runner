@@ -22,7 +22,7 @@ class Jump extends Phaser.Scene {
         this.ACCELERATION = 1500;
         this.MAX_X_VEL = 500;   // pixels/second
         this.MAX_Y_VEL = 5000;
-        this.DRAG = 600;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
         this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀️
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
@@ -41,7 +41,7 @@ class Jump extends Phaser.Scene {
             this.gui = new dat.GUI();
             let playerFolder = this.gui.addFolder('Player Parameters');
             playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
-            playerFolder.add(this, 'DRAG', 0, 1000).step(50);
+            playerFolder.add(this, 'DRAG', 0, 2000).step(50);
             playerFolder.add(this, 'JUMP_VELOCITY', -2000, 0).step(50);
             playerFolder.add(this, 'MAX_JUMPS', 1, 5).step(1);
             playerFolder.open();
