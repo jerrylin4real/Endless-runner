@@ -3,12 +3,11 @@
 *   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery-Character Artist), Qijun Lin (Jerry - Artist/programmer)
 *   game title: Neon Runner
 *   date completed: May 4, 2021
-*   creative tilt justification:
+*   creative tilt justification: used localStorage to track Hgh score.
 ********************************************************************************************************************************
 */
 
-// be stricc
-'use strict';
+
 
 // Global Bariables
 let cursors;
@@ -16,7 +15,7 @@ const SCALE = 0.5;
 const tileSize = 35;
 
 // reserve keyboard variables
-let keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
+let keyC, keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
 
 // global variables/storages
 localStorage.setItem("NeonRunnerBestTime", 0);
@@ -40,17 +39,17 @@ let config = {
       }
     }
   },
-  scene: [Menu, Play, Jump]
+  scene: [Menu, Credit, Play, Jump]
 };
 
-// Legacy config
+/* Legacy config
 let configOld = {
   type: Phaser.CANVAS,
   width: 640,
   height: 480,
   scene: [Menu, Play]
 }
-
+*/
 
 var game = new Phaser.Game(config);
 // var oldgame = new Phaser.Game(configOld);
