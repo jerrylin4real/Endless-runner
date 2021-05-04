@@ -8,7 +8,7 @@ class Menu extends Phaser.Scene {
     // this.load.audio('sfx_select', './assets/blip_select12.wav');
 
     // load image
-    this.load.image('menu_background', 'assets/menu.png');
+    this.load.image('menu_background', 'assets/MENUS.png');
 
   }
 
@@ -36,22 +36,29 @@ class Menu extends Phaser.Scene {
     //this.add.text(game.config.width / 2, game.config.height / 2 + borderUISize + borderPadding - 20, 'Press ↑ to Play', menuConfig).setOrigin(0.5);
 
     // define keys
+    keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C)
     keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     keyDOWN = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
-2  }
+    keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P)
+    
+
+  }
 
   update() {
 
-    if (Phaser.Input.Keyboard.JustDown(keyUP)) {
-      // Alien Test mode
-      game.settings = { // a list of settings
+    if (Phaser.Input.Keyboard.JustDown(keyP)) {
 
-      }
       //this.sound.play('sfx_select');
       this.scene.start("jumpScene");
     }
+
+    if (Phaser.Input.Keyboard.JustDown(keyC)) {
+      this.scene.start("creditScene");
+      console.log("credit restarted");
+  }
+
 
   }
 }
