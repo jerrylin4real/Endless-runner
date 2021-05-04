@@ -68,9 +68,9 @@ class Jump extends Phaser.Scene {
 
         // message text
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
-        this.besttimeText = this.add.text(300, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
+        this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
 
-        this.timeText = this.add.text(450, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
+        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
 
         // For each 1000 ms or 1 second, call ontimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
@@ -257,7 +257,7 @@ class Jump extends Phaser.Scene {
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
         this.physics.world.wrap(this.cloud03, this.cloud03.width / 2);
 
-        this.backgroundIMG.tilePositionX += 4;  // update tile sprite
+        this.backgroundIMG.tilePositionX += 3;  // update tile sprite
 
         if (this.gameOver) {
             if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
