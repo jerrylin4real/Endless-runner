@@ -111,7 +111,7 @@ class Jump extends Phaser.Scene {
                 start: 1,
                 end: 6,
                 suffix: '',
-                zeroPad: 0
+                zeroPad: 2
             }),
             frameRate: 30,
             repeat: -1
@@ -120,7 +120,7 @@ class Jump extends Phaser.Scene {
             key: 'idle',
             defaultTextureKey: 'platformer',
             frames: [
-                { frame: 'front' }
+                { frame: 'stand01' }
             ],
             repeat: -1
         });
@@ -134,6 +134,18 @@ class Jump extends Phaser.Scene {
         });
 
         this.anims.create({
+            key: 'stand',
+            defaultTextureKey: 'platformer',
+            frames: this.anims.generateFrameNames('platformer', {
+                prefix: 'stand',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 2
+            }),
+        });
+
+        this.anims.create({
             key: 'dead',
             defaultTextureKey: 'platformer',
             frames: this.anims.generateFrameNames('platformer', {
@@ -141,7 +153,7 @@ class Jump extends Phaser.Scene {
                 start: 1,
                 end: 2,
                 suffix: '',
-                zeroPad: 1
+                zeroPad: 2
             }),
         });
 
