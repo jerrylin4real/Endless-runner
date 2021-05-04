@@ -2,11 +2,18 @@
 * main.js Header
 *   collaborator names: Leland Jin(Programmer), Qingzhao Cao(Lakery-Character Artist), Qijun Lin (Jerry - Artist/programmer)
 *   game title: Neon Runner
-*   date completed: May 4, 2021
-*   creative tilt justification: used localStorage to track Hgh score.
+*   date completed: May 5, 2021
+*   creative tilt justification: 
+      programming:
+        1. We used localStorage to track longest time lasted across restarts.
+        2. The logic to pause existing background music.
+
+      Art:
+        1. We are proud of our own music and artwork by our artists.
+
 ********************************************************************************************************************************
 */
-//"use strict"; // use no undeclared varibles
+"use strict"; // use no undeclared varibles
 
 // Global Bariables
 let cursors;

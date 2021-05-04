@@ -1,3 +1,4 @@
+// Legacy code for reference only
 // Rocket prefab
 class Rocket extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame) {

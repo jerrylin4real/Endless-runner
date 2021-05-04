@@ -1,3 +1,4 @@
+// Legacy code for reference only
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
