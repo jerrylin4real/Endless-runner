@@ -108,6 +108,8 @@ class Jump extends Phaser.Scene {
         // set up character
         this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
+        this.alien.body.setSize(25, 60, 0) // usage: setSize(width, height, center); set the size of the hitbox
+
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
         // create animations
@@ -309,4 +311,17 @@ class Jump extends Phaser.Scene {
         return;
     }
 
+
+    checkCollision(rocket, ship) {
+        // simple AABB checking
+        if (rocket.x < ship.x + ship.width &&
+            rocket.x + rocket.width > ship.x &&
+            rocket.y < ship.y + ship.height &&
+            rocket.height + rocket.y > ship.y) {
+            return true;
+        } else {
+            return false;
+
+        }
+    }
 }
