@@ -36,8 +36,6 @@ class Jump extends Phaser.Scene {
 
         this.BGcolor = '#223344';
 
-
-
         // setup dat.gui
         if (this.guiGenerated == false) {
             this.gui = new dat.GUI();
@@ -248,13 +246,16 @@ class Jump extends Phaser.Scene {
             this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
         }
     }
-    pauseBGM(bgm){
+
+    pauseBGM(bgm) {
         if (this.bgmCreated) {
             this.bgm.pause()
             this.bgmPlayed = false;
             console.log("Paused BGM");
         }
+        return;
     }
+
     formatTime(seconds) {
         // Minutes
         var minutes = Math.floor(seconds / 60);
@@ -267,13 +268,13 @@ class Jump extends Phaser.Scene {
     }
 
     ontimedEvent() {
-
         if (!this.gameOver) {
             this.update();
             this.initialTime += 1;
             // console.log("initialTime: " + this.initialTime); // debug time 
             this.timeText.setText('Cur_Time: ' + this.formatTime(this.initialTime));
         }
+        return;
     }
 
 }
