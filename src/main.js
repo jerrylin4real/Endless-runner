@@ -6,8 +6,7 @@
 *   creative tilt justification: used localStorage to track Hgh score.
 ********************************************************************************************************************************
 */
-
-
+//"use strict"; // use no undeclared varibles
 
 // Global Bariables
 let cursors;

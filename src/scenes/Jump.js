@@ -9,10 +9,10 @@ class Jump extends Phaser.Scene {
     preload() {
         // set load path
         this.load.image('backgroundIMG', './assets/background.png');
+        this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
 
         this.load.path = 'assets/';
-        this.load.atlas('platformer_atlas', 'kenny_sheet.png', 'kenny_sheet.json');
         this.load.atlas('platformer_kenny', 'kenny.png', 'kenny.json');
     }
 
@@ -86,20 +86,20 @@ class Jump extends Phaser.Scene {
         // make ground tiles group
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width; i += tileSize) {
-            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'platformer_atlas', 'block').setScale(SCALE).setOrigin(0);
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
         for (let i = tileSize * 2; i < game.config.width - tileSize * 13; i += tileSize) {
-            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize * 9, 'platformer_atlas', 'block').setScale(SCALE).setOrigin(0);
+            let groundTile = this.physics.add.sprite(i, game.config.height - tileSize * 9, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_kenny', 'stand02').setScale(SCALE * 2);
+        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer_kenny', 'stand').setScale(SCALE * 2);
         this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -109,9 +109,9 @@ class Jump extends Phaser.Scene {
             frames: this.anims.generateFrameNames('platformer_atlas', {
                 prefix: 'walk',
                 start: 1,
-                end: 11,
+                end: 6,
                 suffix: '',
-                zeroPad: 4
+                zeroPad: 0
             }),
             frameRate: 30,
             repeat: -1
@@ -130,7 +130,21 @@ class Jump extends Phaser.Scene {
             frames: [
                 { frame: 'jump' }
             ],
+            repeat: -1
         });
+
+        this.anims.create({
+            key: 'dead',
+            defaultTextureKey: 'platformer_atlas',
+            frames: this.anims.generateFrameNames('platformer_atlas', {
+                prefix: 'dead',
+                start: 1,
+                end: 2,
+                suffix: '',
+                zeroPad: 1
+            }),
+        });
+
 
         // set up Phaser-provided cursor key input
         cursors = this.input.keyboard.createCursorKeys();
@@ -201,7 +215,7 @@ class Jump extends Phaser.Scene {
             // set acceleration to 0 so DRAG will take over
             this.alien.body.setAccelerationX(0);
             this.alien.body.setDragX(this.DRAG);
-            this.alien.anims.play('idle');
+            this.alien.anims.play('stand');
         }
 
         // check if alien is grounded
