@@ -11,6 +11,8 @@ class Jump extends Phaser.Scene {
         this.load.image('backgroundIMG', './assets/background.png');
         this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
+        this.load.audio('switchsound', './assets/switchsound.wav');
+
 
         this.load.path = './assets/';
         this.load.atlas('platformer', 'kenny.png', 'kenny.json');
@@ -75,28 +77,33 @@ class Jump extends Phaser.Scene {
         // For each 1000 ms or 1 second, call ontimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
 
-        // add some physics clouds
-        this.cloud01 = this.physics.add.sprite(600, 460, 'platformer', 'enemy');
-        this.cloud01.body.setAllowGravity(false).setVelocityX(-180);
-        this.cloud02 = this.physics.add.sprite(200, 360, 'platformer', 'enemy');
-        this.cloud02.body.setAllowGravity(false).setVelocityX(-300);
-        this.cloud03 = this.physics.add.sprite(400, 200, 'platformer', 'enemy');
-        this.cloud03.body.setAllowGravity(false).setVelocityX(-300);
+        // add some random physics clouds
+
+        this.cloud01 = this.physics.add.sprite(Math.floor(Math.random() * 600) + tileSize, (Math.random() * 400), 'platformer', 'enemy');
+        this.cloud01.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 200));
+        this.cloud02 = this.physics.add.sprite(Math.floor(Math.random() * 200) + tileSize, Math.floor(Math.random() * 360), 'platformer', 'enemy');
+        this.cloud02.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 300));
+        this.cloud03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 600), 'platformer', 'enemy');
+        this.cloud03.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 600));
 
         // make ground tiles group
         this.ground = this.add.group();
-        for (let i = 0; i < game.config.width; i += tileSize) {
+        for (let i = 0; i < game.config.width - tileSize; i += tileSize * 10) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
-        for (let i = tileSize * 2; i < game.config.width - tileSize * 13; i += tileSize) {
+        // this.ground.body.setAllowGravity(false).setVelocityX(-30);
+
+        /* // hovering ground
+        for (let i = tileSize * 2; i < game.config.width - tileSize * 2; i += tileSize) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize * 9, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
+        */
 
         // set up character
         this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
@@ -113,7 +120,7 @@ class Jump extends Phaser.Scene {
                 suffix: '',
                 zeroPad: 2
             }),
-            frameRate: 5,
+            frameRate: 4,
             repeat: -1
         });
         this.anims.create({
@@ -135,15 +142,6 @@ class Jump extends Phaser.Scene {
                 suffix: '',
                 zeroPad: 2
             }),
-        });
-
-        this.anims.create({
-            key: 'stand',
-            defaultTextureKey: 'platformer',
-            frames: [
-                { frame: 'stand01' }
-            ],
-            repeat: -1
         });
 
         this.anims.create({
@@ -199,19 +197,22 @@ class Jump extends Phaser.Scene {
         // allow dat.gui updates on some parameters
         this.physics.world.gravity.y = this.Y_GRAVITY;
         this.cameras.main.setBackgroundColor(this.BGcolor);
-        this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
+        //this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
 
         // check keyboard input ...
 
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             console.log("game restarted");
+            // load audio
+            this.sound.play('switchsound');
             this.gameOver = true;
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             this.pauseBGM();
 
             console.log("Loaded Menu Scene");
+            this.sound.play('switchsound');
             this.scene.start("menuScene");
         }
 
@@ -281,6 +282,10 @@ class Jump extends Phaser.Scene {
             console.log("Paused BGM");
         }
         return;
+    }
+
+    randint(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     formatTime(seconds) {

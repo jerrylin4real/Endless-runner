@@ -8,6 +8,9 @@ class Credit extends Phaser.Scene {
     // load image
     this.load.image('creditPage', './assets/credit.png');
 
+    // load audio
+    this.load.audio('switchsound', './assets/switchsound.wav');
+
   }
 
   create() {
@@ -22,6 +25,7 @@ class Credit extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(keyM)) {
       console.log("Loaded Menu Scene");
+      this.sound.play('switchsound');
       this.scene.start("menuScene");
     }
   }

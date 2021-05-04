@@ -5,7 +5,7 @@ class Menu extends Phaser.Scene {
 
   preload() {
     // load audio
-    // this.load.audio('sfx_select', './assets/blip_select12.wav');
+    this.load.audio('switchsound', './assets/switchsound.wav');
 
     // load image
     this.load.image('menu_background', './assets/MENU.png');
@@ -50,15 +50,15 @@ class Menu extends Phaser.Scene {
   update() {
 
     if (Phaser.Input.Keyboard.JustDown(keyP)) {
-
-      //this.sound.play('sfx_select');
+      this.sound.play('switchsound');
       this.scene.start("jumpScene");
     }
 
     if (Phaser.Input.Keyboard.JustDown(keyC)) {
       this.scene.start("creditScene");
-      console.log("credit restarted");
-  }
+      this.sound.play('switchsound');
+      // console.log("credit restarted");
+    }
 
 
   }
