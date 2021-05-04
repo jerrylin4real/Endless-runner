@@ -8,7 +8,7 @@ class Menu extends Phaser.Scene {
     // this.load.audio('sfx_select', './assets/blip_select12.wav');
 
     // load image
-    this.load.image('menu_background', 'assets/MENUS.png');
+    this.load.image('menu_background', './assets/MENU.png');
 
   }
 
@@ -28,6 +28,7 @@ class Menu extends Phaser.Scene {
     }
     // Create background img
     this.add.image(410, 250, 'menu_background');
+    
     // show menu text
     menuConfig.backgroundColor = 'yellow';
     menuConfig.color = '#000';

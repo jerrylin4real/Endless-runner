@@ -6,7 +6,7 @@ class Credit extends Phaser.Scene {
   preload() {
 
     // load image
-    //this.load.image('credit_background', 'assets/credit_background.png');
+    this.load.image('creditPage', './assets/credit.png');
 
   }
 
@@ -14,7 +14,7 @@ class Credit extends Phaser.Scene {
 
     // Define keys 
     keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
-    //this.backgroundIMG = this.add.tileSprite(0, 0, 1338, 525, 'backgroundIMG').setOrigin(0, 0);
+    this.add.image(410, 310, 'creditPage');
 
   }
 
