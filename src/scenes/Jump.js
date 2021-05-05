@@ -12,6 +12,7 @@ class Jump extends Phaser.Scene {
         this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
         this.load.audio('switchsound', './assets/switchsound.wav');
+        this.load.audio('jumpsound','./assets/jumpsound.wav');
 
 
         this.load.path = './assets/';
@@ -85,6 +86,8 @@ class Jump extends Phaser.Scene {
         this.cloud02.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 300));
         this.cloud03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 600), 'platformer', 'enemy');
         this.cloud03.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 600));
+        this.cloud04 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 600), 'platformer', 'money');
+        this.cloud04.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 600));
 
         // make ground tiles group
         this.ground = this.add.group();
@@ -167,6 +170,7 @@ class Jump extends Phaser.Scene {
         this.physics.add.collider(this.alien, this.cloud01);
         this.physics.add.collider(this.alien, this.cloud02);
         this.physics.add.collider(this.alien, this.cloud03);
+        this.physics.add.collider(this.alien, this.cloud04);
 
 
         // Define keys 
@@ -242,6 +246,7 @@ class Jump extends Phaser.Scene {
             this.jumping = false;
         } else {
             this.alien.anims.play('jump');
+            //this.sound.play('jumpsound');
         }
         // allow steady velocity change up to a certain key down duration
         if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
@@ -260,6 +265,7 @@ class Jump extends Phaser.Scene {
         this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
         this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
         this.physics.world.wrap(this.cloud03, this.cloud03.width / 2);
+        this.physics.world.wrap(this.cloud04, this.cloud04.width / 2);
 
         this.backgroundIMG.tilePositionX += 3;  // update tile sprite
 
