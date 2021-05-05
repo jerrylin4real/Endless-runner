@@ -11,8 +11,9 @@ class Jump extends Phaser.Scene {
         this.load.image('backgroundIMG', './assets/background.png');
         this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
-        this.load.audio('switchsound', './assets/switchsound.wav');
+        this.load.audio('selectsound', './assets/Select.wav');
         this.load.audio('jumpsound','./assets/jumpsound.wav');
+        this.load.audio('pickupcion','./assets/Pickup_Coin.wav');
 
 
         this.load.path = './assets/';
@@ -172,6 +173,7 @@ class Jump extends Phaser.Scene {
         this.physics.add.collider(this.alien, this.cloud03);
         this.physics.add.collider(this.alien, this.cloud04);
 
+        
 
         // Define keys 
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
@@ -211,14 +213,14 @@ class Jump extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             console.log("game restarted");
             // load audio
-            this.sound.play('switchsound');
+            this.sound.play('selectsound');
             this.gameOver = true;
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             this.pauseBGM();
 
             console.log("Loaded Menu Scene");
-            this.sound.play('switchsound');
+            this.sound.play('selectsound');
             this.scene.start("menuScene");
         }
 
@@ -246,7 +248,7 @@ class Jump extends Phaser.Scene {
             this.jumping = false;
         } else {
             this.alien.anims.play('jump');
-            //this.sound.play('jumpsound');
+            
         }
         // allow steady velocity change up to a certain key down duration
         if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
@@ -319,16 +321,13 @@ class Jump extends Phaser.Scene {
     }
 
 
-    checkCollision(rocket, ship) {
+    checkCollision(alien, cloud04) {
         // simple AABB checking
-        if (rocket.x < ship.x + ship.width &&
-            rocket.x + rocket.width > ship.x &&
-            rocket.y < ship.y + ship.height &&
-            rocket.height + rocket.y > ship.y) {
-            return true;
-        } else {
-            return false;
-
-        }
+        if (alien.x < cloud04.x + cloud04.width &&
+            alien.x + alien.width > cloud04.x &&
+            alien.y < cloud04.y + cloud04.height &&
+            alien.height + alien.y > cloud04.y) {
+                this.sound.play('pickupcion');
+        } 
     }
 }
