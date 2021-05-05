@@ -247,6 +247,7 @@ class Jump extends Phaser.Scene {
         if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
             this.alien.body.velocity.y = this.JUMP_VELOCITY;
             this.jumping = true;
+            this.sound.play('jumpsound');
         }
         // finally, letting go of the UP key subtracts a jump
         if (this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
