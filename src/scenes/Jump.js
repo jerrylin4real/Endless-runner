@@ -11,7 +11,7 @@ class Jump extends Phaser.Scene {
         this.load.image('backgroundIMG', './assets/background.png');
         this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
-        this.load.audio('selectsound', './assets/Select.wav');
+        this.load.audio('selectsound', './assets/switchsound.wav'); // can replace with Select.wav
         this.load.audio('jumpsound','./assets/jumpsound.wav');
         this.load.audio('pickupcion','./assets/Pickup_Coin.wav');
 
