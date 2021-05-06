@@ -14,7 +14,6 @@ class Credit extends Phaser.Scene {
   }
 
   create() {
-
     // Define keys 
     keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
     this.add.image(410, 310, 'creditPage');
