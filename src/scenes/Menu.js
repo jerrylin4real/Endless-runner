@@ -5,7 +5,7 @@ class Menu extends Phaser.Scene {
 
   preload() {
     // load audio
-    this.load.audio('switchsound', './assets/switchsound.wav');
+    this.load.audio('switchsound', './assets/Select.wav');
 
     // load image
     this.load.image('menu_background', './assets/MENU.png');
