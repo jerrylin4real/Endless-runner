@@ -6,7 +6,7 @@ class Credit extends Phaser.Scene {
   preload() {
 
     // load image
-    this.load.image('creditPage', './assets/credit.png');
+    this.load.image('creditPage', './assets/Credit.png');
 
     // load audio
     this.load.audio('switchsound', './assets/switchsound.wav');
