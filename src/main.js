@@ -19,7 +19,7 @@
 
 // Global Bariables
 let cursors;
-const SCALE = 0.5;
+const SCALE = 0.7;
 const tileSize = 35;
 
 // reserve keyboard variables

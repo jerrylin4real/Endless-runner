@@ -26,10 +26,10 @@ class Jump extends Phaser.Scene {
         this.MAX_X_VEL = 500;   // pixels/second
         this.MAX_Y_VEL = 5000;
         this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
-        this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀
+        this.MAX_JUMPS = 3; // change for double/triple/etc. jumps 🤾‍♀
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
-        this.characterDead = false;
+        //this.characterDead = false;
         this.groundY = 420;
         this.bgmPlayed = false;
         this.bgmCreated = false;
@@ -76,22 +76,22 @@ class Jump extends Phaser.Scene {
         // For each 1000 ms or 1 second, call updateTime
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.updateTime, callbackScope: this, loop: true });
 
-        // add some random physics drivers
+        // add 3 initial drivers
+        this.driver01 = this.physics.add.sprite(this.randint(tileSize, 400), this.randint(200, 300), 'platformer', 'enemy');
+        this.driver01.body.setAllowGravity(false).setVelocityX(-1 * this.randint(100, 200));
+        this.driver02 = this.physics.add.sprite(this.randint(tileSize, 200), this.randint(300, 400), 'platformer', 'enemy');
+        this.driver02.body.setAllowGravity(false).setVelocityX(-1 * this.randint(200, 300));
+        this.driver03 = this.physics.add.sprite(this.randint(tileSize, 100), this.randint(400, 500), 'platformer', 'enemy');
+        this.driver03.body.setAllowGravity(false).setVelocityX(-1 * this.randint(300, 400));
 
-        this.driver01 = this.physics.add.sprite(Math.floor(Math.random() * 300) + tileSize, (Math.random() * 400), 'platformer', 'enemy');
-        this.driver01.body.setAllowGravity(false).setVelocityX(Math.floor(-1 * Math.random() * 200));
-        this.driver02 = this.physics.add.sprite(Math.floor(Math.random() * 200) + tileSize, Math.floor(Math.random() * 360), 'platformer', 'enemy');
-        this.driver02.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 300));
-        this.driver03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 300), 'platformer', 'enemy');
-        this.driver03.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
-        
-        this.coin = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 400), 'platformer', 'money');
+        this.coin = this.physics.add.sprite(this.randint(tileSize, 400), this.randint(tileSize, 400), 'platformer', 'money');
         this.coin.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
         this.coin.coinCount = 0;
+        this.coin.toplay_pickupcoin = false;
 
-        
+
         // message text
-        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
         this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
         this.coinText = this.add.text(200, borderUISize + borderPadding + 10, 'Coin: ' + this.coin.coinCount);
         this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
@@ -118,8 +118,8 @@ class Jump extends Phaser.Scene {
         */
 
         // set up character
-        this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2.5);
-
+        this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
+        this.character.dead = false;
         this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.character.body.setSize(20, 55, 0) // usage: setSize(width, height, center); set the size of the hitbox
 
@@ -180,12 +180,14 @@ class Jump extends Phaser.Scene {
         this.physics.add.collider(this.character, this.driver01);// this.crashedDriver(this.character, this.driver01));
         this.physics.add.collider(this.character, this.driver02); //this.crashedDriver(this.character, this.driver02));
         this.physics.add.collider(this.character, this.driver03); //this.crashedDriver(this.character, this.driver03));
-        this.physics.add.collider(this.character, this.coin, function crashcoin(character, coin,) {
+        this.physics.add.collider(this.character, this.coin, function crashcoin(character, coin) {
             if (!this.gameOver) { // if game is not over
-                
                 coin.coinCount += 1;
-                console.log("character collides with coin" + coin.coinCount);
-                // coin.setActive(false).setVisible(false); // alternative to destory
+                character.dead = true;
+                
+                coin.toplay_pickupcoin = true;
+                console.log("character collides with coin " + coin.coinCount);
+                //coin.setActive(false).setVisible(false); // alternative to destory
                 coin.destroy();
             }
         });
@@ -228,12 +230,18 @@ class Jump extends Phaser.Scene {
 
         // check keyboard input ...
         // press R to restart the game
+
+        if (this.character.dead){
+            this.character.anims.play('dead');
+            this.MAX_JUMPS = 0; // dead man no jumps
+            this.gameOver = true;
+        }
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             console.log("game restarted");
             this.pauseBGM();
             this.sound.play('selectsound');
             //this.initialTime = 0;
-            this.gameOver = true;
+            this.scene.restart();
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
@@ -244,12 +252,12 @@ class Jump extends Phaser.Scene {
         }
 
 
-        if (cursors.left.isDown) {
+        if (!this.character.dead && cursors.left.isDown) {
             this.character.body.setAccelerationX(-this.ACCELERATION);
             this.character.setFlip(true, false);
             // play(key [, ignoreIfPlaying] [, startFrame])
             this.character.anims.play('walk', true);
-        } else if (cursors.right.isDown) {
+        } else if (!this.character.dead && cursors.right.isDown) {
             this.character.body.setAccelerationX(this.ACCELERATION);
             this.character.resetFlip();
             this.character.anims.play('walk', true);
@@ -257,12 +265,16 @@ class Jump extends Phaser.Scene {
             // set acceleration to 0 so DRAG will take over
             this.character.body.setAccelerationX(0);
             this.character.body.setDragX(this.DRAG);
-            this.character.anims.play('stand');
+            if (this.character.dead){
+                this.character.anims.play('dead');
+            } else {
+                this.character.anims.play('stand');
+            }
         }
 
         //this.checkCollision(this.character, this.coin);
 
-        if (this.characterDead) {
+        if (this.character.dead) {
             this.character.anims.play('dead');
         }
         // check if character is grounded
@@ -273,7 +285,7 @@ class Jump extends Phaser.Scene {
         }
         //console.log("character y"+ this.character.body.y)
         // if so, we have jumps to spare 
-        if (this.character.isGrounded) {
+        if (this.character.isGrounded && !this.character.dead) {
             this.jumps = this.MAX_JUMPS; // refresh jumps
             this.jumping = false;
         } else {
@@ -291,6 +303,11 @@ class Jump extends Phaser.Scene {
             this.jumping = false;
         }
 
+        if (this.coin.toplay_pickupcoin) {
+            this.sound.play('pickupcoin');
+            this.coin.toplay_pickupcoin = false; // stop if played
+        }
+
 
         // wrap physics object(s) .wrap(gameObject, padding)
         this.physics.world.wrap(this.driver01, this.driver01.width / 2);
@@ -299,33 +316,19 @@ class Jump extends Phaser.Scene {
         this.physics.world.wrap(this.coin, this.coin.width / 2);
         this.backgroundIMG.tilePositionX += 3;  // update tile sprite
 
-        if (this.gameOver) {
-            if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
-                localStorage.setItem("NeonRunnerBestTime", this.initialTime);
-                this.besttimeText.setText('Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
-            }   
-            this.restartGameEvent = this.time.addEvent({ delay: 50000, callback: this.scene.restart(), callbackScope: this, loop: false });
+        //console.log("gameOver: " + this.gameOver);
 
-         
-
-
-            // reinitialize time and restart game
-        }
     }
 
-    playpickupcoin() { // play pickupcoin sound
-        this.sound.play('pickupcoin');
-    }
-
-    // When the character crashes a driver
-
+    /* When the character crashes a driver
     crashedDriver(character, driver) {
         if (!this.gameOver) { // if game is not over
             if (driver = this.coin) {
                 this.sound.play('pickupcoin');
+
             }
             console.log(character + "collides " + driver);
-            this.characterDead = true; // player character is dead
+            this.character.dead = true; // player character is dead
             driver.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
                 driver.destroy();
             });
@@ -335,7 +338,7 @@ class Jump extends Phaser.Scene {
             this.gameOver = true; // or life --
         }
     }
-
+    */
     pauseBGM(bgm) {
         if (this.bgmCreated) {
             this.bgm.pause()
@@ -367,11 +370,21 @@ class Jump extends Phaser.Scene {
             // console.log("initialTime: " + this.initialTime); // debug time 
             this.timeText.setText('Cur_Time: ' + this.formatTime(this.initialTime));
             this.coinText.setText("Coin: " + this.coin.coinCount);
+        } else {
+            // game is over
+            if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
+                localStorage.setItem("NeonRunnerBestTime", this.initialTime);
+                this.besttimeText.setText('Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
+            }
+            this.add.text(game.config.width / 2, game.config.height / 2, `Game Over!`, { font: '32px Futura', fill: 'white' }).setOrigin(0.5);
+
+            // reinitialize time and restart game
         }
+
         return;
     }
-
-
+}
+/*
     checkCollision(character, driver) { // trynna make this a class
         // simple AABB checking
         if (character.body.x < driver.body.x + driver.body.width &&
@@ -385,7 +398,8 @@ class Jump extends Phaser.Scene {
             }
         }
     }
-}
+
+*/
 
 /*Reference:
     https://ansimuz.itch.io/phaser-3-tutorial-part-9-collisions
