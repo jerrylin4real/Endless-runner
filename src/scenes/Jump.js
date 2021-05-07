@@ -94,7 +94,7 @@ class Jump extends Phaser.Scene {
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
         this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
         this.coinText = this.add.text(200, borderUISize + borderPadding + 10, 'Coin: ' + this.coin.coinCount);
-        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
+        this.timeText = this.add.text(460, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
 
         /* make ground tiles group
 
@@ -177,14 +177,34 @@ class Jump extends Phaser.Scene {
 
         // add physics colliders
         //this.physics.add.collider(this.character, this.ground);
-        this.physics.add.collider(this.character, this.driver01);// this.crashedDriver(this.character, this.driver01));
-        this.physics.add.collider(this.character, this.driver02); //this.crashedDriver(this.character, this.driver02));
-        this.physics.add.collider(this.character, this.driver03); //this.crashedDriver(this.character, this.driver03));
+        this.physics.add.collider(this.character, this.driver01, function crashdriver03(character, driver) {
+            if (!this.gameOver) { // if game is not over
+                character.dead = true;
+                console.log("character collides with driver01");
+                //coin.setActive(false).setVisible(false); // alternative to destory
+                driver.destroy();
+            }
+        });
+        this.physics.add.collider(this.character, this.driver02, function crashdriver03(character, driver) {
+            if (!this.gameOver) { // if game is not over
+                character.dead = true;
+                console.log("character collides with deriver02");
+                //coin.setActive(false).setVisible(false); // alternative to destory
+                driver.destroy();
+            }
+        });
+        this.physics.add.collider(this.character, this.driver03, function crashdriver03(character, driver) {
+            if (!this.gameOver) { // if game is not over
+                character.dead = true;
+                console.log("character collides with driver03");
+                //coin.setActive(false).setVisible(false); // alternative to destory
+                driver.destroy();
+            }
+        });
+
         this.physics.add.collider(this.character, this.coin, function crashcoin(character, coin) {
             if (!this.gameOver) { // if game is not over
                 coin.coinCount += 1;
-                character.dead = true;
-                
                 coin.toplay_pickupcoin = true;
                 console.log("character collides with coin " + coin.coinCount);
                 //coin.setActive(false).setVisible(false); // alternative to destory
@@ -222,6 +242,7 @@ class Jump extends Phaser.Scene {
         }
     }
 
+
     update() {
         // allow dat.gui updates on some parameters
         this.physics.world.gravity.y = this.Y_GRAVITY;
@@ -231,7 +252,7 @@ class Jump extends Phaser.Scene {
         // check keyboard input ...
         // press R to restart the game
 
-        if (this.character.dead){
+        if (this.character.dead) {
             this.character.anims.play('dead');
             this.MAX_JUMPS = 0; // dead man no jumps
             this.gameOver = true;
@@ -265,7 +286,7 @@ class Jump extends Phaser.Scene {
             // set acceleration to 0 so DRAG will take over
             this.character.body.setAccelerationX(0);
             this.character.body.setDragX(this.DRAG);
-            if (this.character.dead){
+            if (this.character.dead) {
                 this.character.anims.play('dead');
             } else {
                 this.character.anims.play('stand');
@@ -288,6 +309,8 @@ class Jump extends Phaser.Scene {
         if (this.character.isGrounded && !this.character.dead) {
             this.jumps = this.MAX_JUMPS; // refresh jumps
             this.jumping = false;
+        } else if (this.character.dead) {
+            this.jumps = 0;
         } else {
             this.character.anims.play('jump');
         }
@@ -325,16 +348,16 @@ class Jump extends Phaser.Scene {
         if (!this.gameOver) { // if game is not over
             if (driver = this.coin) {
                 this.sound.play('pickupcoin');
-
+    
             }
             console.log(character + "collides " + driver);
             this.character.dead = true; // player character is dead
             driver.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
                 driver.destroy();
             });
-
-
-
+    
+    
+    
             this.gameOver = true; // or life --
         }
     }
