@@ -2,8 +2,8 @@
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
-        this.guiGenerated = false;  // change to true before submitting.
-
+        this.guiGenerated = false;  
+        this.characterDead = false;
     }
 
     preload() {
@@ -17,7 +17,7 @@ class Jump extends Phaser.Scene {
 
 
         this.load.path = './assets/';
-        this.load.atlas('platformer', 'kenny.png', 'kenny.json');
+        this.load.atlas('platformer', 'spritesheet.png', 'spritesheet.json');
     }
 
     create() {
@@ -27,10 +27,11 @@ class Jump extends Phaser.Scene {
         this.MAX_X_VEL = 500;   // pixels/second
         this.MAX_Y_VEL = 5000;
         this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
-        this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀️
+        this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
 
+        this.groundY = 420;
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.gameOver = false;
@@ -40,7 +41,7 @@ class Jump extends Phaser.Scene {
 
         this.BGcolor = '#223344';
 
-        // setup dat.gui
+        // setup dat.gui for Game Devs
         if (this.guiGenerated == true) { // change true to false to enable gui
             this.gui = new dat.GUI();
             let playerFolder = this.gui.addFolder('Player Parameters');
@@ -61,7 +62,7 @@ class Jump extends Phaser.Scene {
         this.backgroundIMG = this.add.tileSprite(0, 0, 1338, 525, 'backgroundIMG').setOrigin(0, 0);
 
         // set bg color
-        this.cameras.main.setBackgroundColor(this.BGcolor);
+        //this.cameras.main.setBackgroundColor(this.BGcolor);
 
         // draw grid lines for jump height reference
         /*
@@ -94,14 +95,14 @@ class Jump extends Phaser.Scene {
 
         /* make ground tiles group
         this.ground = this.add.group();
-        for (let i = 0; i < game.config.width - tileSize; i += tileSize * 10) {
+        for (let i = 0; i < game.config.width; i += tileSize) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
         */
-        // this.ground.body.setAllowGravity(false).setVelocityX(-30);
+        //this.ground.body.setAllowGravity(false).setVelocityX(-30);
 
         /* // hovering ground
         for (let i = tileSize * 2; i < game.config.width - tileSize * 2; i += tileSize) {
@@ -113,9 +114,10 @@ class Jump extends Phaser.Scene {
         */
 
         // set up character
-        this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
+        this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2.5);
+        
         this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
-        this.character.body.setSize(25, 60, 0) // usage: setSize(width, height, center); set the size of the hitbox
+        this.character.body.setSize(20, 55, 0) // usage: setSize(width, height, center); set the size of the hitbox
 
         this.character.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
@@ -129,7 +131,7 @@ class Jump extends Phaser.Scene {
                 suffix: '',
                 zeroPad: 2
             }),
-            frameRate: 4,
+            //frameRate: 4,
             repeat: -1
         });
         this.anims.create({
@@ -170,11 +172,11 @@ class Jump extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         // add physics colliders
-        this.physics.add.collider(this.character, this.ground);
-        this.physics.add.collider(this.character, this.driver01);
-        this.physics.add.collider(this.character, this.driver02);
-        this.physics.add.collider(this.character, this.driver03);
-        this.physics.add.collider(this.character, this.driver04);
+        //this.physics.add.collider(this.character, this.ground);
+        this.physics.add.collider(this.character, this.driver01, this.crashedDriver);// this.crashedDriver(this.character, this.driver01));
+        this.physics.add.collider(this.character, this.driver02); //this.crashedDriver(this.character, this.driver02));
+        this.physics.add.collider(this.character, this.driver03); //this.crashedDriver(this.character, this.driver03));
+        this.physics.add.collider(this.character, this.driver04);// this.crashedDriver(this.character, this.driver04));
 
 
 
@@ -211,13 +213,13 @@ class Jump extends Phaser.Scene {
         //this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
 
         // check keyboard input ...
-
         // press R to restart the game
         if (Phaser.Input.Keyboard.JustDown(keyR)) {
             console.log("game restarted");
-            // load audio
+            this.pauseBGM();
             this.sound.play('selectsound');
-            this.gameOver = true;
+            this.initialTime = 0;
+            this.restartGameEvent = this.time.addEvent({ delay: 50000, callback: this.scene.restart(), callbackScope: this, loop: false });
         }
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             this.pauseBGM();
@@ -242,12 +244,21 @@ class Jump extends Phaser.Scene {
             this.character.body.setDragX(this.DRAG);
             this.character.anims.play('stand');
         }
-        
+    
+        if (this.characterDead ){
+            this.character.anims.play('dead');
+        }
         // check if character is grounded
-        this.character.isGrounded = this.character.body.touching.down;
+        if (this.character.body.y >= this.groundY){
+            this.character.isGrounded = true;
+        } else{
+            this.character.isGrounded = false;
+        }
+        //console.log("character y"+ this.character.body.y)
         // if so, we have jumps to spare 
-        if (this.character.x == game.config.width) {
+        if (this.character.isGrounded) {
             this.jumps = this.MAX_JUMPS; // refresh jumps
+            this.jumping = false;
         } else {
             this.character.anims.play('jump');
         }
@@ -260,7 +271,7 @@ class Jump extends Phaser.Scene {
         // finally, letting go of the UP key subtracts a jump
         if (this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
             this.jumps--;
-            this.jumping = true;
+            this.jumping = false;
         }
 
 
@@ -282,8 +293,17 @@ class Jump extends Phaser.Scene {
             this.pauseBGM();
 
             // reinitialize time and restart game
-            this.initialTime = 0;
-            this.restartGameEvent = this.time.addEvent({ delay: 1000, callback: this.scene.restart(), callbackScope: this, loop: false });
+        }
+    }
+    // When the character crashes a driver
+    crashedDriver(character, driver) {
+        if (!this.gameOver) { // if game is not over
+
+            this.characterDead = true; // player character is dead
+            driver.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
+                driver.destroy();
+            });
+            this.gameOver = true; // or life --
         }
     }
 
@@ -324,11 +344,15 @@ class Jump extends Phaser.Scene {
 
     checkCollision(character, driver04) { // trynna make this a class
         // simple AABB checking
-        if (character.x < driver04.x + driver04.width &&
+        if (character.x < driver.x + driver.width &&
             character.x + character.width > driver04.x &&
-            character.y < driver04.y + driver04.height &&
-            character.height + character.y > driver04.y) {
+            character.y < driver.y + driver.height &&
+            character.height + character.y > driver.y) {
             this.sound.play('pickupcoin');
         }
     }
 }
+
+/*Reference:
+    https://ansimuz.itch.io/phaser-3-tutorial-part-9-collisions
+*/
