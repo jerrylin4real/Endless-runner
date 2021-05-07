@@ -77,12 +77,12 @@ class Jump extends Phaser.Scene {
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.updateTime, callbackScope: this, loop: true });
 
         // add 3 initial drivers
-        this.driver01 = this.physics.add.sprite(this.randint(tileSize, 400), this.randint(200, 300), 'platformer', 'enemy');
+        this.driver01 = this.physics.add.sprite(this.randint(700, game.config.width - tileSize), this.randint(200, 300), 'platformer', 'enemy');
         this.driver01.body.setAllowGravity(false).setVelocityX(-1 * this.randint(100, 200));
-        this.driver02 = this.physics.add.sprite(this.randint(tileSize, 200), this.randint(300, 400), 'platformer', 'enemy');
+        this.driver02 = this.physics.add.sprite(this.randint(700, game.config.width - tileSize), this.randint(300, 400), 'platformer', 'enemy');
         this.driver02.body.setAllowGravity(false).setVelocityX(-1 * this.randint(200, 300));
-        this.driver03 = this.physics.add.sprite(this.randint(tileSize, 100), this.randint(400, 500), 'platformer', 'enemy');
-        this.driver03.body.setAllowGravity(false).setVelocityX(-1 * this.randint(300, 400));
+        this.driver03 = this.physics.add.sprite(this.randint(720, game.config.width - tileSize), this.randint(400, 500), 'platformer', 'enemy');
+        this.driver03.body.setAllowGravity(false).setVelocityX(-1 * this.randint(250, 320));
 
         this.coin = this.physics.add.sprite(this.randint(tileSize, 400), this.randint(tileSize, 400), 'platformer', 'money');
         this.coin.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
@@ -91,7 +91,7 @@ class Jump extends Phaser.Scene {
 
 
         // message text
-        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.add.text(game.config.width / 2, 30, `Cursor control ←↑→  (M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
         this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
         this.coinText = this.add.text(200, borderUISize + borderPadding + 10, 'Coin: ' + this.coin.coinCount);
         this.timeText = this.add.text(460, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));

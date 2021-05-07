@@ -6,7 +6,7 @@
 *   creative tilt justification: 
       programming:
         1. We used localStorage to track longest time lasted across restarts.
-        2. The logic to pause existing background music.
+        2. The logic to pause existing background music and restart the game.
         3. Jump mechanics is a lot of learning.
         4. Coin collection
 
@@ -40,7 +40,7 @@ let config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: true, // set to true to see velocity vectors and hitboxes 
+      debug: false, // set to true to see velocity vectors and hitboxes 
       gravity: {
         x: 0,
         y: 0
