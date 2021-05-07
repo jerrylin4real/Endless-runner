@@ -13,7 +13,7 @@ class Jump extends Phaser.Scene {
         this.load.audio('bgm', './assets/bgm1.m4a');
         this.load.audio('selectsound', './assets/switchsound.wav'); // can replace with Select.wav
         this.load.audio('jumpsound', './assets/jumpsound.wav');
-        this.load.audio('pickupcion', './assets/Pickup_Coin.wav');
+        this.load.audio('pickupcoin', './assets/Pickup_Coin.wav');
 
 
         this.load.path = './assets/';
@@ -41,7 +41,7 @@ class Jump extends Phaser.Scene {
         this.BGcolor = '#223344';
 
         // setup dat.gui
-        if (this.guiGenerated == false) {
+        if (this.guiGenerated == true) { // change true to false to enable gui
             this.gui = new dat.GUI();
             let playerFolder = this.gui.addFolder('Player Parameters');
             playerFolder.add(this, 'ACCELERATION', 0, 2500).step(50);
@@ -64,11 +64,13 @@ class Jump extends Phaser.Scene {
         this.cameras.main.setBackgroundColor(this.BGcolor);
 
         // draw grid lines for jump height reference
+        /*
         let graphics = this.add.graphics();
         graphics.lineStyle(2, 0xFFFFFF, 0.1);
         for (let y = game.config.height - 70; y >= 35; y -= 35) {
             graphics.lineBetween(0, y, game.config.width, y);
-        }
+        } 
+        */
 
         // message text
         this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
@@ -90,7 +92,7 @@ class Jump extends Phaser.Scene {
         this.driver04 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 400), 'platformer', 'money');
         this.driver04.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
 
-        // make ground tiles group
+        /* make ground tiles group
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width - tileSize; i += tileSize * 10) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
@@ -98,6 +100,7 @@ class Jump extends Phaser.Scene {
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
+        */
         // this.ground.body.setAllowGravity(false).setVelocityX(-30);
 
         /* // hovering ground
@@ -239,15 +242,14 @@ class Jump extends Phaser.Scene {
             this.character.body.setDragX(this.DRAG);
             this.character.anims.play('stand');
         }
-
+        
         // check if character is grounded
         this.character.isGrounded = this.character.body.touching.down;
         // if so, we have jumps to spare 
-        if (this.character.isGrounded) {
+        if (this.character.x == game.config.width) {
             this.jumps = this.MAX_JUMPS; // refresh jumps
         } else {
             this.character.anims.play('jump');
-
         }
         // allow steady velocity change up to a certain key down duration
         if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
@@ -258,7 +260,7 @@ class Jump extends Phaser.Scene {
         // finally, letting go of the UP key subtracts a jump
         if (this.jumping && Phaser.Input.Keyboard.UpDuration(cursors.up)) {
             this.jumps--;
-            this.jumping = false;
+            this.jumping = true;
         }
 
 
@@ -326,7 +328,7 @@ class Jump extends Phaser.Scene {
             character.x + character.width > driver04.x &&
             character.y < driver04.y + driver04.height &&
             character.height + character.y > driver04.y) {
-            this.sound.play('pickupcion');
+            this.sound.play('pickupcoin');
         }
     }
 }

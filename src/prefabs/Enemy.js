@@ -1,16 +1,15 @@
 // Legacy code for reference only
-// Spaceship prefab
-class Spaceship extends Phaser.GameObjects.Sprite {
+// enemy prefab
+class Enemy extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, frame, pointValue, timeBonusValue) {
         super(scene, x, y, texture, frame);
         scene.add.existing(this);   // add to existing scene
         this.points = pointValue;   // store pointValue
-        this.moveSpeed = game.settings.spaceshipSpeed;         // pixels per frame, 4
-        this.timeBonus = timeBonusValue;
+        this.moveSpeed = game.settings.enemySpeed;         // pixels per frame, 4
     }
 
     update() {
-        // move spaceship left
+        // move enemy left
         this.x -= this.moveSpeed;
         // wrap around from left edge to right edge
         if (this.x <= 0 - this.width) {
@@ -22,5 +21,6 @@ class Spaceship extends Phaser.GameObjects.Sprite {
     // position reset
     reset() {
         this.x = game.config.width;
+        //this.y = game.config.height;
     }
 }
