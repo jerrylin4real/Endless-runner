@@ -91,7 +91,7 @@ class Jump extends Phaser.Scene {
 
 
         // message text
-        this.add.text(game.config.width / 2, 30, `Cursor control ←↑→  (M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.add.text(game.config.width / 2, 30, `Control: Cursor  ←↑→  (M)enu; (R)estart`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
         this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
         this.coinText = this.add.text(200, borderUISize + borderPadding + 10, 'Coin: ' + this.coin.coinCount);
         this.timeText = this.add.text(460, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
@@ -135,7 +135,7 @@ class Jump extends Phaser.Scene {
                 suffix: '',
                 zeroPad: 2
             }),
-            //frameRate: 4,
+            frameRate: 7,
             repeat: -1
         });
         this.anims.create({

@@ -4,11 +4,15 @@
 *   game title: Neon Runner
 *   date completed: May 5, 2021
 *   creative tilt justification: 
+
       programming:
         1. We used localStorage to track longest time lasted across restarts.
         2. The logic to pause existing background music and restart the game.
         3. Jump mechanics is a lot of learning.
-        4. Coin collection
+        4. Coin collection.
+        5. Use of phaser.physics.collider!
+        6. formatTime() and updateTime().
+        7. Issue page on github.
 
       Art:
         1. We are proud of our own music and artwork by our artists.
@@ -19,7 +23,7 @@
 
 // Global Bariables
 let cursors;
-const SCALE = 0.7;
+const SCALE = 0.8;
 const tileSize = 35;
 
 // reserve keyboard variables
@@ -47,7 +51,7 @@ let config = {
       }
     }
   },
-  scene: [Menu, Credit, Play, Jump]
+  scene: [Menu, Credit, Jump]
 };
 
 /* Legacy config
