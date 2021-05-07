@@ -2,8 +2,7 @@
 class Jump extends Phaser.Scene {
     constructor() {
         super('jumpScene');
-        this.guiGenerated = false;  
-        this.characterDead = false;
+        this.guiGenerated = false;
     }
 
     preload() {
@@ -30,13 +29,14 @@ class Jump extends Phaser.Scene {
         this.MAX_JUMPS = 2; // change for double/triple/etc. jumps 🤾‍♀
         this.JUMP_VELOCITY = -700;
         this.Y_GRAVITY = 2600;
-
+        this.characterDead = false;
         this.groundY = 420;
         this.bgmPlayed = false;
         this.bgmCreated = false;
         this.gameOver = false;
         this.WORLD_COLLIDE = true;
         this.physicsDebug = true;
+
         this.initialTime = 0;
 
         this.BGcolor = '#223344';
@@ -73,14 +73,8 @@ class Jump extends Phaser.Scene {
         } 
         */
 
-        // message text
-        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
-        this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
-
-        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
-
-        // For each 1000 ms or 1 second, call ontimedEvent
-        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
+        // For each 1000 ms or 1 second, call updateTime
+        this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.updateTime, callbackScope: this, loop: true });
 
         // add some random physics drivers
 
@@ -90,10 +84,20 @@ class Jump extends Phaser.Scene {
         this.driver02.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 300));
         this.driver03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 300), 'platformer', 'enemy');
         this.driver03.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
-        this.driver04 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 400), 'platformer', 'money');
-        this.driver04.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
+        
+        this.coin = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 400), 'platformer', 'money');
+        this.coin.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
+        this.coin.coinCount = 0;
+
+        
+        // message text
+        this.add.text(game.config.width / 2, 30, `(M)enu; (R)estart; (H)ide dat.gui`, { font: '16px Futura', fill: '#FFFFFF' }).setOrigin(0.5);
+        this.besttimeText = this.add.text(290, borderUISize + borderPadding + 10, 'Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
+        this.coinText = this.add.text(200, borderUISize + borderPadding + 10, 'Coin: ' + this.coin.coinCount);
+        this.timeText = this.add.text(440, borderUISize + borderPadding + 10, 'Cur_Time: ' + this.formatTime(this.initialTime));
 
         /* make ground tiles group
+
         this.ground = this.add.group();
         for (let i = 0; i < game.config.width; i += tileSize) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize, 'ground').setScale(SCALE).setOrigin(0);
@@ -101,10 +105,10 @@ class Jump extends Phaser.Scene {
             groundTile.body.allowGravity = false;
             this.ground.add(groundTile);
         }
-        */
+        
         //this.ground.body.setAllowGravity(false).setVelocityX(-30);
 
-        /* // hovering ground
+         // hovering ground
         for (let i = tileSize * 2; i < game.config.width - tileSize * 2; i += tileSize) {
             let groundTile = this.physics.add.sprite(i, game.config.height - tileSize * 9, 'ground').setScale(SCALE).setOrigin(0);
             groundTile.body.immovable = true;
@@ -115,7 +119,7 @@ class Jump extends Phaser.Scene {
 
         // set up character
         this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2.5);
-        
+
         this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
         this.character.body.setSize(20, 55, 0) // usage: setSize(width, height, center); set the size of the hitbox
 
@@ -173,10 +177,18 @@ class Jump extends Phaser.Scene {
 
         // add physics colliders
         //this.physics.add.collider(this.character, this.ground);
-        this.physics.add.collider(this.character, this.driver01, this.crashedDriver);// this.crashedDriver(this.character, this.driver01));
+        this.physics.add.collider(this.character, this.driver01);// this.crashedDriver(this.character, this.driver01));
         this.physics.add.collider(this.character, this.driver02); //this.crashedDriver(this.character, this.driver02));
         this.physics.add.collider(this.character, this.driver03); //this.crashedDriver(this.character, this.driver03));
-        this.physics.add.collider(this.character, this.driver04);// this.crashedDriver(this.character, this.driver04));
+        this.physics.add.collider(this.character, this.coin, function crashcoin(character, coin,) {
+            if (!this.gameOver) { // if game is not over
+                
+                coin.coinCount += 1;
+                console.log("character collides with coin" + coin.coinCount);
+                // coin.setActive(false).setVisible(false); // alternative to destory
+                coin.destroy();
+            }
+        });
 
 
 
@@ -184,6 +196,8 @@ class Jump extends Phaser.Scene {
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+
 
         // play background music 
         if (this.bgmPlayed == false) {
@@ -218,16 +232,17 @@ class Jump extends Phaser.Scene {
             console.log("game restarted");
             this.pauseBGM();
             this.sound.play('selectsound');
-            this.initialTime = 0;
-            this.restartGameEvent = this.time.addEvent({ delay: 50000, callback: this.scene.restart(), callbackScope: this, loop: false });
+            //this.initialTime = 0;
+            this.gameOver = true;
         }
+
         if (Phaser.Input.Keyboard.JustDown(keyM)) {
             this.pauseBGM();
-
             console.log("Loaded Menu Scene");
             this.sound.play('selectsound');
             this.scene.start("menuScene");
         }
+
 
         if (cursors.left.isDown) {
             this.character.body.setAccelerationX(-this.ACCELERATION);
@@ -244,14 +259,16 @@ class Jump extends Phaser.Scene {
             this.character.body.setDragX(this.DRAG);
             this.character.anims.play('stand');
         }
-    
-        if (this.characterDead ){
+
+        //this.checkCollision(this.character, this.coin);
+
+        if (this.characterDead) {
             this.character.anims.play('dead');
         }
         // check if character is grounded
-        if (this.character.body.y >= this.groundY){
+        if (this.character.body.y >= this.groundY) {
             this.character.isGrounded = true;
-        } else{
+        } else {
             this.character.isGrounded = false;
         }
         //console.log("character y"+ this.character.body.y)
@@ -279,30 +296,42 @@ class Jump extends Phaser.Scene {
         this.physics.world.wrap(this.driver01, this.driver01.width / 2);
         this.physics.world.wrap(this.driver02, this.driver02.width / 2);
         this.physics.world.wrap(this.driver03, this.driver03.width / 2);
-        this.physics.world.wrap(this.driver04, this.driver04.width / 2);
-
+        this.physics.world.wrap(this.coin, this.coin.width / 2);
         this.backgroundIMG.tilePositionX += 3;  // update tile sprite
 
         if (this.gameOver) {
             if (this.initialTime > localStorage.getItem("NeonRunnerBestTime")) {
                 localStorage.setItem("NeonRunnerBestTime", this.initialTime);
                 this.besttimeText.setText('Best Time: ' + this.formatTime(localStorage.getItem("NeonRunnerBestTime")));
-            }
+            }   
+            this.restartGameEvent = this.time.addEvent({ delay: 50000, callback: this.scene.restart(), callbackScope: this, loop: false });
 
-            // pause bgm if it is created
-            this.pauseBGM();
+         
+
 
             // reinitialize time and restart game
         }
     }
+
+    playpickupcoin() { // play pickupcoin sound
+        this.sound.play('pickupcoin');
+    }
+
     // When the character crashes a driver
+
     crashedDriver(character, driver) {
         if (!this.gameOver) { // if game is not over
-
+            if (driver = this.coin) {
+                this.sound.play('pickupcoin');
+            }
+            console.log(character + "collides " + driver);
             this.characterDead = true; // player character is dead
             driver.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
                 driver.destroy();
             });
+
+
+
             this.gameOver = true; // or life --
         }
     }
@@ -331,24 +360,29 @@ class Jump extends Phaser.Scene {
         return `${minutes}:${partInSeconds}`;
     }
 
-    ontimedEvent() {
+    updateTime() {
         if (!this.gameOver) {
             this.update();
             this.initialTime += 1;
             // console.log("initialTime: " + this.initialTime); // debug time 
             this.timeText.setText('Cur_Time: ' + this.formatTime(this.initialTime));
+            this.coinText.setText("Coin: " + this.coin.coinCount);
         }
         return;
     }
 
 
-    checkCollision(character, driver04) { // trynna make this a class
+    checkCollision(character, driver) { // trynna make this a class
         // simple AABB checking
-        if (character.x < driver.x + driver.width &&
-            character.x + character.width > driver04.x &&
-            character.y < driver.y + driver.height &&
-            character.height + character.y > driver.y) {
-            this.sound.play('pickupcoin');
+        if (character.body.x < driver.body.x + driver.body.width &&
+            character.body.x + character.body.width > driver.body.x &&
+            character.body.y < driver.body.y + driver.body.height &&
+            character.body.height + character.body.y > driver.body.y) {
+
+            console.log(character + "collides " + driver);
+            if (driver == this.coin) {
+                this.sound.play('pickupcoin');
+            }
         }
     }
 }

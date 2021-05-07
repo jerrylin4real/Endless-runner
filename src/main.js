@@ -7,6 +7,8 @@
       programming:
         1. We used localStorage to track longest time lasted across restarts.
         2. The logic to pause existing background music.
+        3. Jump mechanics is a lot of learning.
+        4. Coin collection
 
       Art:
         1. We are proud of our own music and artwork by our artists.
@@ -23,11 +25,11 @@ const tileSize = 35;
 // reserve keyboard variables
 let keyC, keyF, keyR, keyLEFT, keyRIGHT, keyUP, keyDOWN, keyW, keyS, keyA, keyD, keyQ, keyP, keyM, keyV;
 
-// global variables/storages
+// Global variables/storages
 localStorage.setItem("NeonRunnerBestTime", 0);
 //localStorage.setItem("RocketPatrolTopScore", 0);
 
-// localStorage.setItem("RocketPatrolSettings", {});
+//localStorage.setItem("RocketPatrolSettings", {});
 
 
 // main game object
@@ -38,7 +40,7 @@ let config = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: false, // set to true to see velocity vectors and hitboxes 
+      debug: true, // set to true to see velocity vectors and hitboxes 
       gravity: {
         x: 0,
         y: 0
