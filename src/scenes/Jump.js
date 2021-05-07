@@ -12,8 +12,8 @@ class Jump extends Phaser.Scene {
         this.load.image('ground', './assets/ground.png');
         this.load.audio('bgm', './assets/bgm1.m4a');
         this.load.audio('selectsound', './assets/switchsound.wav'); // can replace with Select.wav
-        this.load.audio('jumpsound','./assets/jumpsound.wav');
-        this.load.audio('pickupcion','./assets/Pickup_Coin.wav');
+        this.load.audio('jumpsound', './assets/jumpsound.wav');
+        this.load.audio('pickupcion', './assets/Pickup_Coin.wav');
 
 
         this.load.path = './assets/';
@@ -79,16 +79,16 @@ class Jump extends Phaser.Scene {
         // For each 1000 ms or 1 second, call ontimedEvent
         this.timedEvent = this.time.addEvent({ delay: 1000, callback: this.ontimedEvent, callbackScope: this, loop: true });
 
-        // add some random physics clouds
+        // add some random physics drivers
 
-        this.cloud01 = this.physics.add.sprite(Math.floor(Math.random() * 600) + tileSize, (Math.random() * 400), 'platformer', 'enemy');
-        this.cloud01.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 200));
-        this.cloud02 = this.physics.add.sprite(Math.floor(Math.random() * 200) + tileSize, Math.floor(Math.random() * 360), 'platformer', 'enemy');
-        this.cloud02.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 300));
-        this.cloud03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 600), 'platformer', 'enemy');
-        this.cloud03.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 600));
-        this.cloud04 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 600), 'platformer', 'money');
-        this.cloud04.body.setAllowGravity(false).setVelocityX(Math.floor(Math.random() * 600));
+        this.driver01 = this.physics.add.sprite(Math.floor(Math.random() * 300) + tileSize, (Math.random() * 400), 'platformer', 'enemy');
+        this.driver01.body.setAllowGravity(false).setVelocityX(Math.floor(-1 * Math.random() * 200));
+        this.driver02 = this.physics.add.sprite(Math.floor(Math.random() * 200) + tileSize, Math.floor(Math.random() * 360), 'platformer', 'enemy');
+        this.driver02.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 300));
+        this.driver03 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 300), 'platformer', 'enemy');
+        this.driver03.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
+        this.driver04 = this.physics.add.sprite(Math.floor(Math.random() * 400) + tileSize, Math.floor(Math.random() * 400), 'platformer', 'money');
+        this.driver04.body.setAllowGravity(false).setVelocityX(-1 * Math.floor(Math.random() * 600));
 
         // make ground tiles group
         this.ground = this.add.group();
@@ -110,11 +110,11 @@ class Jump extends Phaser.Scene {
         */
 
         // set up character
-        this.alien = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
-        this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
-        this.alien.body.setSize(25, 60, 0) // usage: setSize(width, height, center); set the size of the hitbox
+        this.character = this.physics.add.sprite(game.config.width / 2, game.config.height / 2, 'platformer', 'stand').setScale(SCALE * 2);
+        this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
+        this.character.body.setSize(25, 60, 0) // usage: setSize(width, height, center); set the size of the hitbox
 
-        this.alien.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
+        this.character.setMaxVelocity(this.MAX_X_VEL, this.MAX_Y_VEL);
 
         // create animations
         this.anims.create({
@@ -167,13 +167,13 @@ class Jump extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         // add physics colliders
-        this.physics.add.collider(this.alien, this.ground);
-        this.physics.add.collider(this.alien, this.cloud01);
-        this.physics.add.collider(this.alien, this.cloud02);
-        this.physics.add.collider(this.alien, this.cloud03);
-        this.physics.add.collider(this.alien, this.cloud04);
+        this.physics.add.collider(this.character, this.ground);
+        this.physics.add.collider(this.character, this.driver01);
+        this.physics.add.collider(this.character, this.driver02);
+        this.physics.add.collider(this.character, this.driver03);
+        this.physics.add.collider(this.character, this.driver04);
 
-        
+
 
         // Define keys 
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
@@ -205,7 +205,7 @@ class Jump extends Phaser.Scene {
         // allow dat.gui updates on some parameters
         this.physics.world.gravity.y = this.Y_GRAVITY;
         this.cameras.main.setBackgroundColor(this.BGcolor);
-        //this.alien.setCollideWorldBounds(this.WORLD_COLLIDE);
+        //this.character.setCollideWorldBounds(this.WORLD_COLLIDE);
 
         // check keyboard input ...
 
@@ -225,34 +225,33 @@ class Jump extends Phaser.Scene {
         }
 
         if (cursors.left.isDown) {
-            this.alien.body.setAccelerationX(-this.ACCELERATION);
-            this.alien.setFlip(true, false);
+            this.character.body.setAccelerationX(-this.ACCELERATION);
+            this.character.setFlip(true, false);
             // play(key [, ignoreIfPlaying] [, startFrame])
-            this.alien.anims.play('walk', true);
+            this.character.anims.play('walk', true);
         } else if (cursors.right.isDown) {
-            this.alien.body.setAccelerationX(this.ACCELERATION);
-            this.alien.resetFlip();
-            this.alien.anims.play('walk', true);
+            this.character.body.setAccelerationX(this.ACCELERATION);
+            this.character.resetFlip();
+            this.character.anims.play('walk', true);
         } else {
             // set acceleration to 0 so DRAG will take over
-            this.alien.body.setAccelerationX(0);
-            this.alien.body.setDragX(this.DRAG);
-            this.alien.anims.play('stand');
+            this.character.body.setAccelerationX(0);
+            this.character.body.setDragX(this.DRAG);
+            this.character.anims.play('stand');
         }
 
-        // check if alien is grounded
-        this.alien.isGrounded = this.alien.body.touching.down;
+        // check if character is grounded
+        this.character.isGrounded = this.character.body.touching.down;
         // if so, we have jumps to spare 
-        if (this.alien.isGrounded) {
-            this.jumps = this.MAX_JUMPS;
-            this.jumping = false;
+        if (this.character.isGrounded) {
+            this.jumps = this.MAX_JUMPS; // refresh jumps
         } else {
-            this.alien.anims.play('jump');
-            
+            this.character.anims.play('jump');
+
         }
         // allow steady velocity change up to a certain key down duration
         if (this.jumps > 0 && Phaser.Input.Keyboard.DownDuration(cursors.up, 150)) {
-            this.alien.body.velocity.y = this.JUMP_VELOCITY;
+            this.character.body.velocity.y = this.JUMP_VELOCITY;
             this.jumping = true;
             this.sound.play('jumpsound');
         }
@@ -264,10 +263,10 @@ class Jump extends Phaser.Scene {
 
 
         // wrap physics object(s) .wrap(gameObject, padding)
-        this.physics.world.wrap(this.cloud01, this.cloud01.width / 2);
-        this.physics.world.wrap(this.cloud02, this.cloud02.width / 2);
-        this.physics.world.wrap(this.cloud03, this.cloud03.width / 2);
-        this.physics.world.wrap(this.cloud04, this.cloud04.width / 2);
+        this.physics.world.wrap(this.driver01, this.driver01.width / 2);
+        this.physics.world.wrap(this.driver02, this.driver02.width / 2);
+        this.physics.world.wrap(this.driver03, this.driver03.width / 2);
+        this.physics.world.wrap(this.driver04, this.driver04.width / 2);
 
         this.backgroundIMG.tilePositionX += 3;  // update tile sprite
 
@@ -321,13 +320,13 @@ class Jump extends Phaser.Scene {
     }
 
 
-    checkCollision(alien, cloud04) {
+    checkCollision(character, driver04) { // trynna make this a class
         // simple AABB checking
-        if (alien.x < cloud04.x + cloud04.width &&
-            alien.x + alien.width > cloud04.x &&
-            alien.y < cloud04.y + cloud04.height &&
-            alien.height + alien.y > cloud04.y) {
-                this.sound.play('pickupcion');
-        } 
+        if (character.x < driver04.x + driver04.width &&
+            character.x + character.width > driver04.x &&
+            character.y < driver04.y + driver04.height &&
+            character.height + character.y > driver04.y) {
+            this.sound.play('pickupcion');
+        }
     }
 }
